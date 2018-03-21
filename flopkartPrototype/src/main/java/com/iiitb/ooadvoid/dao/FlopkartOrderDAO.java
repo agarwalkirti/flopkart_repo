@@ -1,8 +1,10 @@
 package com.iiitb.ooadvoid.dao;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import com.iiitb.ooadvoid.pojo.FlopkartOrder;
-import com.iiitb.ooadvoid.pojo.FlopkartSubcategory;
 
 public class FlopkartOrderDAO extends HibernateDAO<FlopkartOrder>
 {
@@ -14,6 +16,10 @@ String entity_name = "FlopkartOrder";
 	}
 	public FlopkartOrder addFlopkartOrder(FlopkartOrder order)
 	{
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = new Date();
+		String todayDate = dateFormat.format(date);
+		order.setOrderDate(todayDate);
 		super.add(order);
 //		order = super.find(entity_name , 
 //				"orderId" , String.valueOf(order.getOrderId()),
@@ -24,6 +30,11 @@ String entity_name = "FlopkartOrder";
 	public List<FlopkartOrder> getFlopkartOrderByUserId(Integer UserId)
 	{		
 		return super.findAll(entity_name,"userid", UserId);
+	}
+	
+	public List<FlopkartOrder> getFlopkartOrderByOrderId(Integer orderId)
+	{		
+		return super.findAll(entity_name,"orderid", orderId);
 	}
 	
 	

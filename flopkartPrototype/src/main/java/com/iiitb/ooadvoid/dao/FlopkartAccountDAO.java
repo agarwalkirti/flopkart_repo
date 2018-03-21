@@ -29,4 +29,14 @@ public class FlopkartAccountDAO extends HibernateDAO<FlopkartAccount>{
 	{
 		return super.find(new FlopkartAccount(),id);
 	}
+
+	public int updateFlopkartAccount(int id, FlopkartAccount acc)
+	{
+		if (id <= 0)
+			return 0;	
+		if(acc.getPin()!=null)
+			acc.setPin(acc.encodePin(Integer.parseInt(acc.getPin())));
+		super.update(acc,id);
+		return 1;
+	}
 }

@@ -235,11 +235,9 @@
 					     <div class="col-md-8 sidebar"> 
 					     	<input type="button" style="font-size:14px;color: white; 
    							padding: 4px 20px; background-color:#e7e7e7; color: black;" value="ADD" id="ADD">
-					     </div>
-					   <!--  <div class="col-md-4 sidebar"> 
 					     	<input type="button" style="font-size:14px;color: white; 
    							padding: 4px 20px; background-color:#e7e7e7; color: black;" value="DELETE" id="DEL1">
-					     </div> --> 
+					     </div> 
 					      <div class="col-md-2 sidebar"></div>
 					</div>
 					
@@ -293,6 +291,7 @@ $(document).ready(function(){
 		$('#sub-cat-content').hide();
 		$('#sub-cat-head').hide();
 		fetch();
+		$('#DEL1').hide();
 		
 		$("#cat-content").on("change",function() {
 		    var period = this.value;
@@ -308,13 +307,13 @@ $(document).ready(function(){
 			$('#cnt').val(counter);
 			var row1 = '<div class="row"  id="TextBoxDiv'+counter+'" style="margin-bottom:8px;">'+
 				'<div class="col-md-5 sidebar"> '+
-				'<input type="text" class="form-control input-lg"  name="key'+counter+'" id="key'+counter+'" >'+
+				'<input type="text" class="form-control input-lg"  name="key'+counter+'" id="key'+counter+'" required>'+
 				'</div>'+
 				'<div class="col-md-2 sidebar" style="margin-top:10px; ">'+
-				'<label ><b>:</b></label>'+
+				'<label><b>:</b></label>'+
 				'</div>'+
 				'<div class="col-md-5 sidebar"> '+
-				' <input type="text" class="form-control input-lg"  name="val'+counter+'" id="val'+counter+'" >'+
+				'<input type="text" class="form-control input-lg"  name="val'+counter+'" id="val'+counter+'" required>'+
 				'</div> '+
 				'</div > ';
 			
@@ -322,15 +321,19 @@ $(document).ready(function(){
 			
 			$('#TextBoxesGroup1').append($(this).data('row1'));
 			
-			
-			
-			
+			if(counter==0)
+				$('#DEL1').hide();
+			else
+				$('#DEL1').show();
 		});
 		
 		
 		$('#DEL1').click(function(){
 			counter--;
-			  $('#TextBoxesGroup1 .row').eq(  $('#TextBoxesGroup1 .row').length-1 ).remove();
+			$('#cnt').val(counter);
+			$('#TextBoxesGroup1 .row').eq(  $('#TextBoxesGroup1 .row').length-1 ).remove();
+			if(counter==0)
+				$('#DEL1').hide();
 		});
 		
 	})
@@ -340,7 +343,7 @@ function checkCookie()
     var result = getCookie("seller_details");
     if (result != "") 
     {	
-    		var user = JSON.parse(result);
+    	var user = JSON.parse(result);
 		setCookie("seller_details", result, 10);
 		document.getElementById("sellername").innerText = user.firstName;
 		sellerId(user);

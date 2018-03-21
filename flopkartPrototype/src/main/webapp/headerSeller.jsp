@@ -43,8 +43,7 @@
       <div class="header-top-inner">
         	<div class="cnt-account">
 				<ul class="list-unstyled">
-						<li><a href="underConstruct.html"><i class="fa fa-bell" ></i> Notification</a></li>
-						<li><a href="sellerHub.jsp" onclick="logout()"><i class="fa fa-check"></i> Logout</a></li>
+<!-- 						<li><a href="underConstruct.html"><i class="fa fa-bell" ></i> Notification</a></li> -->
 					</ul>
 		 </div>
         <!-- /.cnt-account -->
@@ -105,9 +104,9 @@
 									<li class="active dropdown yamm-fw">
 										<a	href="sellerViewItem.jsp" style="color:black">VIEW YOUR ITEMS</a></li>
 									<li class="active dropdown yamm-fw">
-										<a	href="listingDeal.jsp" style="color:black">ADD DEAL TO LISTING</a></li>
+										<a	href="sellerViewOrder.jsp" style="color:black">VIEW ORDERS</a></li>
 									<li class="active dropdown yamm-fw">
-										<a	href="#" style="color:black">VIEW ORDERS</a></li>
+										<a	href="listingDeal.jsp" style="color:black">ADD DEAL TO LISTING</a></li>
 								</ul>
 								<!-- /.navbar-nav -->
 								<div class="clearfix"></div>

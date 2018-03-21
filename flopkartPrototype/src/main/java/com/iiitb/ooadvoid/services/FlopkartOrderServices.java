@@ -41,6 +41,19 @@ public class FlopkartOrderServices
 		else
 			return order_details;
 	}
+
+	@GET
+	@Path("/order/{id}")
+	@Produces("application/json")
+	public List<FlopkartOrder> getFlopkartbyOrderId(@PathParam("id") int orderId)
+	{
+		FlopkartOrderDAO dao = new FlopkartOrderDAO();
+		List<FlopkartOrder> order_details = dao.getFlopkartOrderByOrderId(orderId);
+		if(order_details==null)
+			return null;
+		else
+			return order_details;
+	}
 	
 	@GET
 	@Path("/item/{id}")
@@ -88,13 +101,38 @@ public class FlopkartOrderServices
 	@PUT
 	@Path("/update/{id}")
 	@Consumes("application/json")
-	public Response updateFlopkart_Order(@PathParam("id") int id, FlopkartOrder order)
+	public Response updateFlopkartOrder(@PathParam("id") int id, FlopkartOrder order)
 	{
 		FlopkartOrderDAO dao = new FlopkartOrderDAO();
 		int count = dao.updateFlopkartOrder(id, order);
 		if (count == 0)
 		{
 			return Response.status(Response.Status.BAD_REQUEST).build();
+		}
+		return Response.ok().build();
+	}
+
+
+	@PUT
+	@Path("/update/orderid")
+	@Consumes("application/json")
+	public Response updateFlopkartOrderbyOrderId(FlopkartOrder order)
+	{
+		FlopkartOrderDAO dao = new FlopkartOrderDAO();
+		List<FlopkartOrder> order_details = dao.getFlopkartOrderByOrderId(order.getOrderId());
+		if(order_details==null)
+			return null;
+		else
+		{
+			for(FlopkartOrder o : order_details)
+			{
+				dao.updateFlopkartOrder(o.getId(), order);
+//				if (count == 0)
+//				{
+//					return Response.status(Response.Status.BAD_REQUEST).build();
+//				}
+			}
+//			return Response.ok().build();
 		}
 		return Response.ok().build();
 	}

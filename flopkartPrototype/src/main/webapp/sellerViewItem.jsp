@@ -204,7 +204,10 @@ function checkCookie()
 	    	return review;
 	    }
 	    
-	   
+	    function logout()
+	    {
+	    	deleteCookie("seller_details");
+	    }
 	  
 	    
 	</script>		

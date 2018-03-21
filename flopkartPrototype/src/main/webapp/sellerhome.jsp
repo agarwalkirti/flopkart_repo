@@ -20,7 +20,7 @@
 	 <div class="search-result-container"  style="text-align:center;border-color:#ddd">
 	  <div class="sidebar-widget wow fadeInUp" style="visibility: hidden; animation-name: none; ">
 	        
-		<div style="height:500px;padding-top:100px">
+		<div style="height:500px;">
 		  <div class="search-result-container"  style="text-align:center;">
              <div class="widget-header" style="padding-top:40px">
 	           
@@ -50,7 +50,15 @@
 	            </div>   
         		
       	</div>
-      	
+      	<div class="search-result-container"  style="text-align:center;">
+               <div class="widget-header" style="padding-top:60px">
+	            
+	           		<button style="font-size:18px ;border-color:#777 ;border-radius: 2px; color:#000; padding:15px 50px; background-color: #ffdb4d;" onClick="window.location='listingDeal.jsp';">
+					 ADD DEAL TO LISTING
+					 </button>
+	            </div>   
+        		
+      	</div>
 	      </div>
 	   </div>
         </div>
@@ -101,6 +109,11 @@ function checkCookie()
     		logout();
     }
 } 
+
+function logout()
+{
+	deleteCookie("seller_details");
+}
 	</script>		
 </body>
 </html>

@@ -4,27 +4,27 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class FlopkartAccount {
-		private int id;
-		private int userid;
-		private int accountno;
-		private int balance;
+		private Integer id;
+		private Integer userid;
+		private Integer accountno;
+		private Integer balance;
 		private String pin;
-		public int getId() {
+		public Integer getId() {
 			return id;
 		}
-		public void setId(int id) {
+		public void setId(Integer id) {
 			this.id = id;
 		}
-		public int getUserid() {
+		public Integer getUserid() {
 			return userid;
 		}
-		public void setUserid(int userid) {
+		public void setUserid(Integer userid) {
 			this.userid = userid;
 		}
-		public int getBalance() {
+		public Integer getBalance() {
 			return balance;
 		}
-		public void setBalance(int balance) {
+		public void setBalance(Integer balance) {
 			this.balance = balance;
 		}
 		public String getPin() {
@@ -35,7 +35,7 @@ public class FlopkartAccount {
 		}
 		
 
-		public String encodePin(int pin)
+		public String encodePin(Integer pin)
 		{
 			StringBuffer sb = new StringBuffer();
 			try
@@ -56,10 +56,10 @@ public class FlopkartAccount {
 		}
 		
 
-		public int getAccountno() {
+		public Integer getAccountno() {
 			return accountno;
 		}
-		public void setAccountno(int accountno) {
+		public void setAccountno(Integer accountno) {
 			this.accountno = accountno;
 		}
 		

@@ -7,11 +7,11 @@ public class FlopkartOrder
 	private Integer userId;
 	private String itemId;
 	private Integer orderId;
-	private Integer quantity;
 	private String status;
 	private String orderDate;
 	private Integer totalAmount;
-
+	private Integer quantity;
+	
 	public Integer getId()
 	{
 		return id;

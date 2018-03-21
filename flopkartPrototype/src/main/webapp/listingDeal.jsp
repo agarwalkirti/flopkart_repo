@@ -213,6 +213,7 @@ function toJSON()
 function validate(){
 	var start = new Date($("#startDate").val());
 	var end = new Date($("#endDate").val());
+	alert(start)
 	var dealid = $("#dealId").val();
 	var listingid = $("#listingId").val();
 	var today = new Date();
