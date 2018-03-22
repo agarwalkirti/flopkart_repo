@@ -451,7 +451,7 @@ function checkCookie()
     var user = getCookie("user_details");
     if (user != "") 
     {
-		setCookie("user_details", user, 10);
+		setCookie("user_details", user, 30);
 		diplayUser(JSON.parse(user));
     } 
     else 
@@ -465,7 +465,7 @@ function resetCookie()
     var user = getCookie("user_details");
     if (user != "") 
     {
-		setCookie("user_details", user, 10);
+		setCookie("user_details", user, 30);
 		diplayUser(JSON.parse(user));
     } 
     else 

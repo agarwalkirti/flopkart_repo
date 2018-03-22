@@ -39,7 +39,7 @@
     	  </div></div>
           <nav class="yamm megamenu-horizontal">
             <ul id="sidebarCat" class="nav">
-              <li><a style='color:black' href="#">Deals of the day</a></li><!-- /.menu-item -->
+              <li><a style='color:black' href="offerZone.jsp">Deals of the day</a></li><!-- /.menu-item -->
             </ul>
           </nav><!-- /.nav --> 
           <!-- /.megamenu-horizontal --> 
@@ -59,7 +59,12 @@
 					<p id="timer" style="position: relative; display: inline-block; margin-right: 8px; 
 					font-size: 16px; color: #7f7f7f;padding-top: 7px;"></p>
 				</div>
-
+				
+				<input type="number" id="dealid" hidden="hidden">
+				<input type="number" id="listingid" hidden="hidden">
+				<input type="text" id="listingname" hidden="hidden">
+				<input type="text" id="imgurl" hidden="hidden">
+				
 				<div id="category-product" class="category-product">
 				</div> <!-- category-product -->
               </div> <!-- row -->
@@ -79,7 +84,7 @@ $(document).ready(function(){
     var ctxPath = "<%=request.getContextPath()%>";
 	headerFunctions(ctxPath);
 	fetchCateg(ctxPath);
-	getTodayDeals(ctxPath);
+	getListingDet(ctxPath);
 })
 
 // Update the count down every 1 second
@@ -222,65 +227,75 @@ function dropdownBak(obj)
 // 	$('#ul_'+obj.id).empty();
 }
 
-function getTodayDeals(ctxPath){
+function getListingDet(ctxPath){
+	var subcatid = <%=request.getParameter("id")%>;
 	$.ajax({
 		type : 'GET',
-		url : ctxPath + "/webapi/listingDeals/today",
+		contentType : 'application/json',
+		url : ctxPath + "/webapi/listings/subcategory/"+subcatid,
 		dataType : "json", // data type of response
-		success : function(data)
-				  {
-					getListingDets(data,ctxPath);
-					getDealDets(data,ctxPath);
-			   },
-			error: function() 
-		       { //alert("error occurred"); 
-		       }
+		success : function(listings)
+			{
+				for(var i=0;i<listings.length;i++){
+					getDealDet(listings[i],ctxPath);
+				}
+			},
+	   	error: function() 
+	   		{
+	       	//alert("error occurred");
+	   		}
 	});
 }
 
-function getListingDets(data,ctxPath){
+function getDealDet(listings,ctxPath){
+	var listingid = listings.id;
+	var listingname = listings.listingName;
+	var imgurl = listings.imgUrl;
 	<% AccessProperties ap = new AccessProperties(); %>
     var imgServerURL = "<%=ap.getImageServerURL() %>"; 
-	for(var i=0; i<data.length; i++){
-		$.ajax({
-			type : 'GET',
-			async:false,
-			url : ctxPath + "/webapi/listings/"+data[i].listingid,
-			dataType : "json", // data type of response
-			success : function(res){
-				var valu = "";
-				valu = "<div class='col-sm-6 col-md-3 box fadeInUp'><div class='products'>"+
-	    		"<div class='product'><div class='product-image'><div class='image'><a href='item.jsp?id="+res.id+"'>"+
-	    		"<img style='display: block; object-fit: contain; width: 250px; height: 250px;' src='"+ (imgServerURL+res.imgUrl) +"' alt=''>"+
-	    		"</a></div></div><div class='product-info text-center'>"+
-			         "<div style='font-size: 14px; font-weight: 500; margin-top: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;'>"+
-			         "<a href='item.jsp?id="+res.id+"'>"+res.listingName+"</a></div>"+
-			         "<div style='color: #388e3c; padding-top: 8px; white-space: nowrap; overflow: hidden;"+
-			           "text-overflow: ellipsis;' id='demo"+i+"'>"+"</div></div></div></div></div>"
-				$("#category-product").append(valu);
+	$.ajax({
+		type : 'GET',
+		contentType : 'application/json',
+		url : ctxPath + "/webapi/listingDeals/listing/"+listingid,
+		dataType : "json", // data type of response
+		success : function(listingDeal)
+			{
+				if(listingDeal!=null){
+					var data = "<div class='col-sm-6 col-md-3 box fadeInUp'><div class='products'>"+
+		    		"<div class='product'><div class='product-image'><div class='image'><a href='item.jsp?id="+listingDeal[0].listingid+"'>"+
+		    		"<img style='display: block; object-fit: contain; width: 250px; height: 250px;' src='"+ (imgServerURL+imgurl) +"' alt=''>"+
+		    		"</a></div></div><div class='product-info text-center'>"+
+				         "<div style='font-size: 14px; font-weight: 500; margin-top: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;'>"+
+				         "<a href='item.jsp?id="+listingDeal[0].listingid+"'>"+listingname+"</a></div>"+
+				         "<div style='color: #388e3c; padding-top: 8px; white-space: nowrap; overflow: hidden;"+
+				           "text-overflow: ellipsis;' id='demo"+listingDeal[0].listingid+"'>"+"</div></div></div></div></div>"
+				    $("#category-product").append(data);
+					loadItems(listingDeal[0].listingid,listingDeal[0].dealid,ctxPath);
+				}
 			},
-			error: function(){
-				//alert("error occurred"); 
-			}
-		});
-	}	
+	   	error: function() 
+	   		{
+	       	//alert("error occurred");
+	   		}
+	});
 }
 
-function getDealDets(data,ctxPath){
-	for(var i=0; i<data.length; i++){
-		$.ajax({
-				type : 'GET',
-				async:false,
-				url : ctxPath + "/webapi/deals/"+data[i].dealid,
-				dataType : "json", // data type of response
-				success : function(resul){
-					document.getElementById("demo"+i).innerHTML = resul.dealname+" ";	
-				},
-				error: function(){
-					//alert("error occurred"); 
-				}
-			});
-	}
+function loadItems(listid,dealid,ctxPath){
+	//alert(dealid)
+	$.ajax({
+		type : 'GET',
+		contentType : 'application/json',
+		url : ctxPath + "/webapi/deals/"+dealid,
+		dataType : "json", // data type of response
+		success : function(deal)
+			{
+				document.getElementById("demo"+listid).innerHTML = deal.dealname+" ";	
+			},
+	   	error: function() 
+	   		{
+	       	//alert("error occurred");
+	   		}
+	});
 }
 </script>
 </body>

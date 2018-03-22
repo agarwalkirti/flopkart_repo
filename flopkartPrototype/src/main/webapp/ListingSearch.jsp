@@ -2,7 +2,6 @@
 	pageEncoding="ISO-8859-1"%>
 <%@ page import="com.iiitb.ooadvoid.AccessProperties" %>
 <!DOCTYPE html>
-<!-- saved from url=(0060)http://www.themesground.com/flipmart-demo/HTML/category.jsp -->
 <html>
 <head>
 	<%@include file="metaContent.jsp" %>
@@ -56,7 +55,7 @@
               <input type="number" style = 'font-size:20px; text-align:center;' value="100000" name="MaxPrice" id="MaxPrice" >
            </div>
            <div id="priceError" style="font-size:15px;color:red">Minimum price cannot be larger than maximum price</div>
-              <button type="button" id="applyFilter" style="margin:auto;display:block;margin-top:40px" onclick="loadListings()"><b>Apply Filter</b></button>
+              <button type="button" class="btn btn-primary" id="applyFilter" style="margin:auto;display:block;margin-top:40px;" onclick="loadListings()"><b>Apply Filter</b></button>
         </section>
         
       </div>
@@ -137,8 +136,8 @@ $(document).ready(function()
 		result["ActualPrice"]=ActualPrice;
 		var data="";
 		data+="<div class='col-sm-4, box'><a href='item.jsp?id="+result.id+
-		"'> <div style='width: 260px;height: 250px;'>"+
-		"<img class='listingImage' style='max-height:100%; max-width:100%;' src='"+
+		"'> <div style=''>"+
+		"<img class='listingImage' style='display: block; object-fit: contain; width: 250px; height: 250px;' src='"+
 		imgServerURL+result.imgUrl+"' alt=''></div>"+
         "<div style = 'font-size:15px; text-align:center'>"+result.listingName+"</div>"+
         "<div style = 'font-size:10px; text-align:left; font-family:verdana;display:inline-block;margin-right:10px;color:green'>"+
@@ -217,7 +216,7 @@ $(document).ready(function()
     			continue;
     		var data="";
     		data+="<div class='col-sm-4, box'><a href='item.jsp?id="+result[i].id+
-    		"'> <div style='width: 260px;height: 250px;'>"+
+    		"'> <div style='width: 250px;height: 250px;'>"+
     		"<img class='listingImage' style='max-height:100%; max-width:100%;' src='"+
     		imgServerURL+result[i].imgUrl+"' alt=''></div>"+
             "<div style = 'font-size:15px; text-align:center'>"+result[i].listingName+"</div>"+
@@ -231,7 +230,6 @@ $(document).ready(function()
 	       	$('#listing').append(data);
     		};
     };
-
     function starJson(listing)
     {
     	var review = JSON.stringify({

@@ -344,7 +344,7 @@ function checkCookie()
     if (result != "") 
     {	
     	var user = JSON.parse(result);
-		setCookie("seller_details", result, 10);
+		setCookie("seller_details", result, 30);
 		document.getElementById("sellername").innerText = user.firstName;
 		sellerId(user);
 	
@@ -363,7 +363,7 @@ function resetCookie()
     var user = getCookie("user_details");
     if (user != "") 
     {
-		setCookie("user_details", user, 10);
+		setCookie("user_details", user, 30);
 		sellerId(JSON.parse(user));
     } 
     else 
