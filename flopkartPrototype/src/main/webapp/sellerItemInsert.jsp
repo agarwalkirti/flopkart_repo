@@ -161,8 +161,23 @@
 	            </div>   
 			    <div class="row">
 			      <div class="col-md-5 sidebar"> 
-		              <input type="text" class="form-control input-lg"  name="clr" id="clr" 
-		              autocomplete="name"required >
+			        <select  id  = "clr" name="clr"  style="margin:20px;background-color: white; font-size: 19px;" required>
+			      	   <option value="Black">Black</option>
+					   <option value="Blue">Blue</option>
+					   <option value="Green">Green</option>
+					   <option value="Brown">Brown</option>
+					   <option value="Magenta">Magenta</option>
+					   <option value="White">White</option>
+					   <option value="Peach">Peach</option>
+					   <option value="Red">Red</option>
+					   <option value="Orange">Orange</option>
+					   <option value="Grey">Grey</option>
+					   <option value="Cyan">Cyan</option>
+					   <option value="Gold">Gold</option>
+					   <option value="Transparent">Transparent</option>
+					</select>
+<!-- 		              <input type="text" class="form-control input-lg"  name="clr" id="clr"  -->
+<!-- 		              autocomplete="name"required > -->
 		          </div>
 		         </div> 
         		</div>
