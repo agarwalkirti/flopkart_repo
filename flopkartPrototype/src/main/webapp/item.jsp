@@ -125,7 +125,7 @@
 								<!-- /.single-product-gallery -->
 								<div class="buynowdiv">
 									<form action="buyNow.jsp">
-										<button id="buynow" class="buynow">Buy Now</button>
+										<button id="buynow" onclick="return checkLogin()" class="buynow">Buy Now</button>
 										<button class="addtocart" id="addtocart">Add to cart
 										</button>
 										<input type="text" name="listingid"
@@ -434,6 +434,15 @@ function getDealName(ctxPath){
 				//alert("error occurred"); 
 			}
 		});
+	}
+}
+
+function checkLogin()
+{
+	if(getCookie("user_details")=="") 
+	{
+		alert("Please Login");
+		return false;
 	}
 }
 </script>

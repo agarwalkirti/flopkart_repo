@@ -435,6 +435,7 @@ function paymentOption()
 				$("#orderProgress").append('<li><a href="#" id="arrow" class="progress-class glyphicon glyphicon-arrow-down"></a></li>');
 				$("#orderProgress").append('<li><a href="#" id="payStatus" class="progress-class"><b id="paymentStatus"></b></a></li>');
 				$("#confirmOrder").prop('disabled', true);
+				$("#applydeal").prop('disabled', true);
 				$("#arrow").hide();
 			},
 			error: function() {
@@ -541,18 +542,19 @@ function displayDetails(id)
 function applyDeal()
 {
 	var test_val = false;
-	for(var j=1;j<=3;j++)
+	var quant = <%=quant%>;
+	for(var j=<%=quant%>;j<=3;j++)
 	{
 		if($("#itemlist_"+j).val()==0)
 			test_val=true;	
 	}
 	if(test_val)
-		alert("Select all 3");
+		alert("Select appropriate items to avail deal");
 	else
 	{
 		var total = parseInt($("#total_th").text());
 		var min = total;
-		for(var j=1;j<=3;j++)
+		for(var j=<%=quant%>;j<=3;j++)
 		{
 			var listing_json = JSON.parse($("#itemlist_"+j).val());
 			var actualPrice = listing_json.price - (listing_json.discount*listing_json.price/100);
@@ -596,7 +598,7 @@ function fetchDeal()
 						var dealTitle = "<h3 style='color:purple;margin-left:40px'>Buy 3 Get 1 Free!</h3>";
 						$("#dealDetails_div").append(dealTitle);
 						
-						for(var j=1;j<=3;j++)
+						for(var j=<%=quant%>;j<=3;j++)
 						{
 							var dropdown_item = "<select id='itemlist_"+j+"' class='itemlist' style='margin-left:40px'>"+
 							"<option value=' "+ 0 +" '>Select an item</option>"+
