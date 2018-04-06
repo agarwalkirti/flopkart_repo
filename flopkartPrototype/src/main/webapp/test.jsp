@@ -11,12 +11,15 @@
     <%@include file="header.jsp" %>
      
   	<div>Your Content</div>
+  	
      
     <%@include file="footer.jsp" %>
      
 </body>
+
 <script>
 $(document).ready(function(){
+	swal("Here's the title!", "...and here's the text!");
     var ctxPath = "<%=request.getContextPath()%>";
 	headerFunctions(ctxPath);
 })

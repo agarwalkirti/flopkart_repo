@@ -1,7 +1,7 @@
 
 package com.iiitb.ooadvoid.dao;
 
-import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,12 +19,29 @@ public class FlopkartListingDealDAO extends HibernateDAO<FlopkartListingDeal>
 		return item;
 	}
 	
-	public List<FlopkartListingDeal> getTodayFlopkartListingDeals()
+	public List<FlopkartListingDeal> getTodayFlopkartListingDeals() throws ParseException
 	{
-		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		Date date = new Date();
-		String todayDate = dateFormat.format(date);
-		return super.findAll(entity_name, "startDate", todayDate);
+		String todaydate = dateFormat.format(date);
+		date = dateFormat.parse(todaydate);
+		Date endDate, startDate;
+		List<FlopkartListingDeal> deals = super.list(new FlopkartListingDeal());
+		List<FlopkartListingDeal> todayDeals = new ArrayList<FlopkartListingDeal>();
+		for(FlopkartListingDeal deal : deals) {
+			endDate = dateFormat.parse(deal.getEnddate());
+			startDate = dateFormat.parse(deal.getStartdate());
+			if(endDate.before(date)) {
+				super.remove(entity_name,deal.getId());
+			}
+			else if(startDate.after(date)) {
+				//System.out.println(startDate+" "+endDate);
+			}
+			else {
+				todayDeals.add(deal);
+			}
+		}
+		return todayDeals;
 	}
 	
 	public List<FlopkartListingDeal> getFlopkartListingDealsByListingId(int listingId)

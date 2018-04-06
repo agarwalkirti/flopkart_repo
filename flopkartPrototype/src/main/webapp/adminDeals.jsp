@@ -48,6 +48,7 @@
 <script src="./bootstrapFiles/js/bootstrap-select.min.js"></script>
 <script src="./bootstrapFiles/js/wow.min.js"></script>
 <script src="./bootstrapFiles/js/scripts.js"></script>
+<script src="./bootstrapFiles/js/sweetalert.min.js"></script>
 <script>
 $(document).ready(function(){
 	fetch();
@@ -72,7 +73,7 @@ function fetch()
             $("#content").html(data);
     	},
     	error:function() {
-        	alert("error occurred");
+        	swal("error occurred");
     	}
 	});
 }
@@ -83,12 +84,12 @@ function formToJSON()
 	var flopkartDeal = JSON.stringify({
 	    "dealname" : dealName
 	});
-	alert(flopkartDeal);
+	//alert(flopkartDeal);
 	return flopkartDeal;
 }
 
 function render(){
-	alert("Succesful entry into the database");
+	swal("Succesful entry into the database");
 	window.location.reload(true);
 }
 
@@ -103,7 +104,7 @@ function insertDealCategory()
 			data : formToJSON(),
 			success : render(),
 			error: function() {
-				alert(JSON.stringify(err));
+				swal(JSON.stringify(err));
 			}
 	});
 }

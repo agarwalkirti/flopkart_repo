@@ -49,6 +49,7 @@
 <script src="./bootstrapFiles/js/scripts.js"></script>
 <script src="./customJavascripts/cookies.js"></script>
 <script src="./customJavascripts/cookies.js"></script>
+<script src="./bootstrapFiles/js/sweetalert.min.js"></script>
 <script>
 $(document).ready(function(){
 	
@@ -72,7 +73,7 @@ function checkCookie()
 	
     } 
     else 
-    {	alert("Login failed. Try again.");
+    {	swal("Login failed. Try again.");
       	window.location = "sellerHub.jsp";
     		logout();
     }
@@ -103,14 +104,14 @@ function checkCookie()
 		        							dataType : "json", // data type of response
 		        							success : displayListings,
 		        					    	error:function(err) {
-		        					    		alert(err);
+		        					    		swal(err);
 		        					    	}
 		        						});
 		        				}
 		        	            
 		        	    	},
 		        	    	error:function(){
-		        	    		alert("error occurred");
+		        	    		swal("error occurred");
 		        	        	
 		        	    	}
 		        		});
@@ -119,7 +120,7 @@ function checkCookie()
 		function getDeals(result){
 			var ctxPath = "<%=request.getContextPath()%>";
 			
-           	alert(data1)
+           	swal(data1)
            	return data1;
 		}
 		
@@ -138,17 +139,22 @@ function checkCookie()
            		url : ctxPath + "/webapi/listingDeals/listing/"+listingid,
            		dataType : "json", // data type of response
            		success : function(res){
-        			data+="<div class = 'row' style = 'font-size:15px; text-align:left; padding-left:20px;' ><div class='col-sm-4' style = 'font-size:15px; text-align:left; padding-top: 40px ; padding-left:40px;'>"+
-           			" <div style='width: 260px;height: 250px;'>"+
-           			"<img class='listingImage' style='max-height:100%; max-width:100%;' src='"+
-           			imgServerURL+result.imgUrl+"' alt=''></div></div>"+
-           		    "<div class='col-sm-8'style ='font-size:15px; text-align:left; padding-top: 70px ; padding-left:60px;' ><div style = 'font-size:15px;'>Item Name :  "+result.listingName+"</div>"+
-           		    "<div style = 'font-size:15px; text-align:left; font-family:verdana;display:inline-block;margin-right:10px;color:green'>Discount :  "+
-           		    result.discount+"% off</div><br/>"+
-           		    "<div style = 'font-size:15px; position:left; font-family:verdana;margin-right:10px;display:inline-block'>"+
-           		    "<i class='fa fa-inr' style='font-size:15px'></i>Actual Price :  "+result.ActualPrice+"</div>"+
-           		    "<div style = 'font-size:15px;'>Quantity :  "+result.quantity+"</div>"+
-           		    "<span style='display:inline-flex;font-size:15px;color:red'>Deal: &nbsp; <div id='dealid_"+listingid+"'>";
+        			data+="<div class = 'row' style = 'font-size:15px; text-align:left; padding-left:20px;' >"+
+        					"<div class='col-sm-4' style = 'font-size:15px; text-align:left; padding-top: 40px ; padding-left:40px;'>"+
+           					" <div style='width: 260px;height: 250px;'>"+
+           						"<img class='listingImage' style='max-height:100%; max-width:100%;' src='"+
+           							imgServerURL+result.imgUrl+"' alt=''>"+
+           					"</div>"+
+           				"</div>"+
+           		    		"<div class='col-sm-8'style ='font-size:15px; text-align:left; padding-top: 70px ; padding-left:60px;' >"+
+           		    			"<div style = 'font-size:15px;'>Item Name :  "+result.listingName+"</div>"+
+           		    			"<div style = 'font-size:15px; text-align:left; font-family:verdana;display:inline-block;margin-right:10px;color:green'>Discount :  "+
+           		    				result.discount+"% off"+
+           		    			"</div><br/>"+
+           		    			"<div style = 'font-size:15px; position:left; font-family:verdana;margin-right:10px;display:inline-block'>"+
+	           		    "<i class='fa fa-inr' style='font-size:15px'></i>Actual Price :  "+result.ActualPrice+"</div>"+
+	           		    "<div style = 'font-size:15px;'>Quantity :  "+result.quantity+"</div>"+
+	           		    "<span style='display:inline-flex;font-size:15px;color:red'>Deal: &nbsp; <div id='dealid_"+listingid+"'>";
            		 	data += "</div></span></div></div>";
      	       		$('#listing').append(data);
            		 	if(res!=null){
@@ -158,7 +164,7 @@ function checkCookie()
            			}
            		},
            		error : function() {
-           			alert("error")
+           			swal("error")
            		}
            	 });
 		}

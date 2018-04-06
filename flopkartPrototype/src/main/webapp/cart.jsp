@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<%@ page import="com.iiitb.ooadvoid.AccessProperties"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -326,52 +327,20 @@ input:valid ~ .floating-label {
 		<!-- /.main-header -->
 </header>
 		
-<div class="body-content outer-top-xs">
+<div class="body-content outer-top-xs" id="cartBody">
 		<div class="row">
 			<div style="margin-left: 50px" class="col-md-8 col-sm-12 shopping-cart">
 				<div class="shopping-cart-table">
 	<div class="table-responsive">
+		<input type="number" id="noOfItems" hidden="hidden">
 		<table class="table">
 			<thead>
 				<tr>
-					<th class="cart-quantity item" colspan="7" style="text-align: left; font-size: 16px">MY CART (1)</th>
+					<th class="cart-quantity item" colspan="7" style="text-align: left; font-size: 16px" id="cartQuant"></th>
 				</tr>
 			</thead><!-- /thead -->
-			<tbody>
-				<tr>
-					<td class="cart-image">
-						<a class="entry-thumbnail" href="item.jsp">
-						    <img src="./images/products/p2.jpg" alt="">
-						</a>
-					</td>
-					<td class="cart-product-name-info">
-						<h4 class='cart-product-description'><a href="detail.html">Men's Leather Strap Watch</a></h4>
-						<div class="row">
-							<div class="col-sm-4">
-								<div class="rating rateit-small"></div>
-							</div>
-							<div class="col-sm-8">
-								<div class="reviews">
-									(06 Reviews)
-								</div>
-							</div>
-						</div><!-- /.row -->
-						<div class="cart-product-info">
-											<span class="product-color">COLOR:<span>Blue</span></span>
-						</div>
-					</td>
-					<td class="cart-product-quantity">
-						<div class="quant-input">
-				                <div class="arrows">
-				                  <div id="quant-up" class="arrow plus gradient"><span ><i class="icon fa fa-sort-asc"></i></span></div>
-				                  <div id="quant-down" class="arrow minus gradient"><span ><i class="icon fa fa-sort-desc"></i></span></div>
-				                </div>
-				                <input type="number" id="quantity" min="1">
-			              </div>
-		            </td>
-					<td class="cart-product-grand-total"><input type="number" id="oneCost" hidden="hidden" value="300"><input type="number" id="oneActualCost" hidden="hidden" value="450">
-					<span><i class="fa fa-rupee-sign"></i> <span id="price">300 </span>  </span><span><del>  <i class="fa fa-rupee-sign"></i> <span id="originalPrice">450</span></del></span></td>
-				</tr>
+			<tbody id="content">
+				
 			</tbody><!-- /tbody -->
 			<tfoot>
 				<tr>
@@ -417,6 +386,7 @@ input:valid ~ .floating-label {
 			</tr>
 			<tr>
 				<td>
+					<input type="number" id="actualcarttotal" hidden="hidden">
 					<div class="savings">Your Total Savings on this order <span><i class="fa fa-rupee-sign"></i> <span id="savings"></span></span></div>
 				</td>
 			</tr>
@@ -434,7 +404,10 @@ input:valid ~ .floating-label {
 			</div> <!-- /.row -->
 	</div> <!-- body-content outer-top-xs -->
  
- 
+ <div class="body-content outer-top-xs" id="emptyCart" style="text-align: center; padding: 30px 0 36px 0;">
+ 	<img src="./images/emptyCart.png" style="height: 162px;">
+ 	<span style="display: block; font-size: 18px; margin-top: 24px;">Your Shopping Cart is empty</span>
+ </div>
  
  
  <!-- JavaScripts placed at the end of the document so the pages load faster --> 
@@ -447,8 +420,7 @@ input:valid ~ .floating-label {
 <script src="./bootstrapFiles/js/bootstrap-slider.min.js"></script>
 <script src="./bootstrapFiles/js/jquery.rateit.min.js"></script>
 <script src="./bootstrapFiles/js/bootstrap-select.min.js"></script>
-<script src="./bootstrapFiles/js/wow.min.js"></script>
-<script src="./bootstrapFiles/js/scripts.js"></script>
+<script src="./bootstrapFiles/js/sweetalert.min.js"></script>
 <script src="./customJavascripts/cookies.js"></script>
 <script src="./customJavascripts/header.js"></script>
 <script>
@@ -471,67 +443,74 @@ $(document).ready(function(){
 	$("#pass_txt").focus(function(){
         $('.warning').hide(); // hide error popup
 	});	
-	
-	$("#quantity").val(1);
-	$("#totalPrice").text(parseInt($("#price").text()));
-	var value = $("#totalPrice").text();
-    if(parseInt(value)>=1000) {
-    	$("#deliveryCharges").text("0");
-    }
-    else if(parseInt(value)<1000) {
-    	$("#deliveryCharges").text("50");
-    }
-	$("#amount-payable").text(parseInt($("#totalPrice").text())+parseInt($("#deliveryCharges").text()));
-	$("#savings").text(parseInt($("#originalPrice").text())-parseInt($("#price").text()))
+	$("#cartBody").hide();
+	$("#emptyCart").show();
+	getCartItems();
 });
 
-$("#quant-up").click(function(){
-	var value = $("#quantity").val();
-	var onecost = $("#oneCost").val();
-	var oneactual = $("#oneActualCost").val();
+function quantup(i){
+	var value = parseFloat(document.getElementById("quantity"+i).value);
+	var onecost = parseFloat(document.getElementById("oneCost"+i).value);
+	var oneactual = parseFloat(document.getElementById("oneActualCost"+i).value);
+	var price = parseFloat(document.getElementById("price"+i).innerHTML);
+	var origprice = parseFloat(document.getElementById("originalPrice"+i).innerHTML);
+	var totalprice = parseFloat($("#totalPrice").text());
+	var actualtotal = parseFloat($("#actualcarttotal").val()); 
+	alert($("#actualcarttotal").val())
+	totalprice -= price;
+	actualtotal -= origprice;
+	
 	value++;
-	$("#quantity").val(value);
+	document.getElementById("quantity"+i).value = value;
 	onecost *= value;
 	oneactual *= value;
-	$("#price").text(onecost);
-	$("#originalPrice").text(oneactual);
-	var pricevalue = $("#price").text();
-	var origvalue = $("#originalPrice").text();
-	$("#originalPrice").text(origvalue);
-	$("#totalPrice").text(pricevalue);
+	document.getElementById("price"+i).innerHTML = onecost;
+	document.getElementById("originalPrice"+i).innerHTML = oneactual;
+	totalprice += onecost;
+	actualtotal += oneactual;
+	var savings = actualtotal - totalprice;
+	$("#totalPrice").text(totalprice.toFixed(1));
+	$("#actualcarttotal").val(actualtotal.toFixed(1));
 	textChange();
-	$("#amount-payable").text(parseInt($("#totalPrice").text())+parseInt($("#deliveryCharges").text()));
-	$("#savings").text(parseInt($("#originalPrice").text())-parseInt($("#price").text()));
-});
+	$("#amount-payable").text(parseFloat($("#totalPrice").text())+parseFloat($("#deliveryCharges").text()));
+	$("#savings").text(savings.toFixed(1));
+}
 
-$("#quant-down").click(function(){
-	var value = $("#quantity").val();
-	var onecost = $("#oneCost").val();
-	var oneactual = $("#oneActualCost").val();
+function quantdown(i){
+	var value = parseFloat(document.getElementById("quantity"+i).value);
+	var onecost = parseInt(document.getElementById("oneCost"+i).value);
+	var oneactual = parseFloat(document.getElementById("oneActualCost"+i).value);
+	var price = parseFloat(document.getElementById("price"+i).innerHTML);
+	var origprice = parseFloat(document.getElementById("originalPrice"+i).innerHTML);
+	var totalprice = parseFloat($("#totalPrice").text());
+	var actualtotal = parseFloat($("#actualcarttotal").val()); 
+	totalprice -= price;
+	actualtotal -= origprice;
 	if(value>1){
 		value--;
-		$("#quantity").val(value);
+		document.getElementById("quantity"+i).value = value;
 		onecost *= value;
 		oneactual *= value;
-		$("#price").text(onecost);
-		$("#originalPrice").text(oneactual);
-		var pricevalue = $("#price").text();
-		var origvalue = $("#originalPrice").text();
-		$("#originalPrice").text(origvalue);
-		$("#totalPrice").text(pricevalue);
+		document.getElementById("price"+i).innerHTML = onecost;
+		document.getElementById("originalPrice"+i).innerHTML = oneactual;
+		totalprice += onecost;
+		actualtotal += oneactual;
+		var savings = actualtotal - totalprice;
+		$("#totalPrice").text(totalprice.toFixed(1));
+		$("#actualcarttotal").val(actualtotal.toFixed(1));
 		textChange();
-		$("#amount-payable").text(parseInt($("#totalPrice").text())+parseInt($("#deliveryCharges").text()));
-		$("#savings").text(parseInt($("#originalPrice").text())-parseInt($("#price").text()));
+		$("#amount-payable").text(parseFloat($("#totalPrice").text())+parseFloat($("#deliveryCharges").text()));
+		$("#savings").text(savings.toFixed(1));
 	}
-});
+}
 
 //if total cart amount is more than 1000, delivery charge becomes 0
 function textChange(){
     var value = $("#totalPrice").text();
-    if(parseInt(value)>=1000) {
+    if(parseFloat(value)>=1000) {
     	$("#deliveryCharges").text("0");
     }
-    else if(parseInt(value)<1000) {
+    else if(parseFloat(value)<1000) {
     	$("#deliveryCharges").text("50");
     }
 }
@@ -707,6 +686,119 @@ function renderDetails(user)
 	}
 
 	return false;
+}
+
+function getCartItems(){
+	var ctxPath = "<%=request.getContextPath()%>";
+	var user = getCookie("user_details");
+	user = JSON.parse(user);
+	var userId = user.id;
+	$.ajax(
+	{
+		type : 'GET',
+		contentType : 'application/json',
+		url : ctxPath + "/webapi/cart/user/"+userId,
+		dataType : "json", // data type of response
+		success : function(cartItems){
+			if(cartItems!="") {
+            	renderCartItem(cartItems);
+			}
+    	},
+    	error:function() {
+        	swal("error occurred");
+    	}
+	});
+}
+
+function renderCartItem(cartItems){
+	var ctxPath = "<%=request.getContextPath()%>";
+	<%AccessProperties ap = new AccessProperties();%>
+	var imgServerURL = "<%=ap.getImageServerURL()%>";
+	for(var i in cartItems){
+		var itemID = cartItems[i].itemId;
+		$.ajax(
+				{
+					type : 'GET',
+					async: false,
+					contentType : 'application/json',
+					url : ctxPath + "/webapi/listings/item/"+itemID,
+					dataType : "json", // data type of response
+					success : function(item){
+						var amount = item.price - (item.discount*item.price/100);
+						var data = "<tr>";
+			            data += "<td class='cart-image'>"+
+						"<a class='entry-thumbnail' href='item.jsp?id="+item.id+"'>"+
+					    "<img src='"+imgServerURL+item.imgUrl+"' alt=''>"+
+					"</a>"+
+				"</td>"+
+				"<td class='cart-product-name-info'>"+
+					"<h4 class='cart-product-description'>"+"<a href='item.jsp?id="+item.id+"'>"+item.listingName+"</a>"+"</h4>"+
+					"<div class='row'>"+
+						"<div class='col-sm-4'>"+
+							"<div class='rating rateit-small'>"+"</div>"+
+						"</div>"+
+						"<div class='col-sm-8'>"+
+							//ratings
+						"</div>"+
+					"</div>"+"<!-- /.row -->"+
+					"<div class='cart-product-info'>"+
+					"COLOR: "+item.colour+"<br/>"+"Seller id: "+item.sellerid+
+					"</div>"+
+				"</td>"+
+				"<td class='cart-product-quantity'>"+
+					"<div class='quant-input'>"+
+			                "<div class='arrows'>"+
+			                  "<div id='quant-up"+i+"' class='arrow plus gradient' onclick='quantup("+i+")'>"+"<span >"+"<i class='icon fa fa-sort-asc'>"+"</i>"+"</span>"+"</div>"+
+			                  "<div id='quant-down"+i+"' class='arrow minus gradient' onclick='quantdown("+i+")'>"+"<span >"+"<i class='icon fa fa-sort-desc'>"+"</i>"+"</span>"+"</div>"+
+			                "</div>"+
+			                "<input type='number' id='quantity"+i+"' min='1' value='"+cartItems[i].quantity+"'>"+
+		              "</div>"+
+	            "</td>"+
+				"<td class='cart-product-grand-total'>"+"<input type='number' id='oneCost"+i+"' hidden='hidden' value='"+amount+"'>"+"<input type='number' id='oneActualCost"+i+"' hidden='hidden' value='"+item.price+"'>"+
+				"<span>"+"<i class='fa fa-rupee-sign'>"+"</i>"+ "<span id='price"+i+"'>"+amount+ "</span>"+  "</span>"+"<span>"+"&nbsp; <del>"+  "<i class='fa fa-rupee-sign'>"+"</i>"+ "<span id='originalPrice"+i+"'>"+item.price+"</span>"+"</del>"+"</span>"+"</td>"
+			    data += "<td><a style='color:black' href='#'><i class='fa fa-trash'></i></a></td>"        
+				data += "</tr>";
+			            $("#cartQuant").text("MY CART ("+(parseFloat(i)+1)+")");
+			            $("#noOfItems").val(parseFloat(i)+1);
+			            $("#content").append(data);
+			    	},
+			    	error:function() {
+			        	swal("error occurred");
+			    	}
+				});
+	}
+	$("#emptyCart").hide();
+	$("#cartBody").show();
+	calculate();
+}
+
+function calculate(){
+	var num = $("#noOfItems").val();
+	var savings = 0.0;
+	var total = 0.0;
+	var actualtotal = 0.0;
+	var price, actualprice, quant;
+	for(var i=0;i<num;i++){
+		price = parseFloat(document.getElementById("price"+i).innerHTML);
+		actualprice = parseFloat(document.getElementById("originalPrice"+i).innerHTML);
+		quant = parseFloat(document.getElementById("quantity"+i).value);
+		price = price * quant;
+		actualprice = actualprice * quant;
+		total += price;
+		actualtotal += actualprice;
+		savings += actualprice - price;
+	}
+	$("#totalPrice").text(total.toFixed(1));
+	var value = $("#totalPrice").text();
+    if(parseFloat(value)>=1000) {
+    	$("#deliveryCharges").text("0");
+    }
+    else if(parseFloat(value)<1000) {
+    	$("#deliveryCharges").text("50");
+    }
+    $("#actualcarttotal").val(actualtotal.toFixed(1));
+	$("#amount-payable").text(parseFloat($("#totalPrice").text())+parseFloat($("#deliveryCharges").text()));
+	$("#savings").text(savings);
 }
 </script>
 </body>

@@ -85,6 +85,7 @@
 <script src="./bootstrapFiles/js/wow.min.js"></script> 
 <script src="./bootstrapFiles/js/scripts.js"></script>
 <script src="./customJavascripts/cookies.js"></script>
+<script src="./bootstrapFiles/js/sweetalert.min.js"></script>
 
 <script>
 $(document).ready(function(){
@@ -104,7 +105,7 @@ function checkCookie()
 	
     } 
     else 
-    {	alert("Login failed. Try again.");
+    {	swal("Login failed. Try again.");
       	window.location = "sellerHub.jsp";
     		logout();
     }

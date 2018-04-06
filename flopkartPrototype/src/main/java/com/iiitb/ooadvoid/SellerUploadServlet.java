@@ -50,6 +50,9 @@ public class SellerUploadServlet extends HttpServlet
 	String desptn = "";
 	String pic_url = "";
 	Integer sellerid= 0;
+	String selleremail="";
+	String catname1="";
+	String subcatname1="";
 	Integer cnt= 0;
 	Integer x = 1;
 	Integer y = 1;
@@ -99,6 +102,28 @@ public class SellerUploadServlet extends HttpServlet
 						
 					}
 
+					else if (name.equals("selleremail"))
+					{
+						selleremail =  (String) item.getString();
+						System.out.println("selleremail "+itemid);
+						
+					}
+
+					else if (name.equals("catname1"))
+					{
+						catname1 =  (String) item.getString();
+						System.out.println("catname1"+itemid);
+						
+					}
+
+					else if (name.equals("subcatname1"))
+					{
+						subcatname1 =  (String) item.getString();
+						System.out.println("subcatname1 "+itemid);
+						
+					}
+
+					
 					else if (name.equals("brand"))
 					{
 						brand = (String) item.getString();
@@ -179,12 +204,12 @@ public class SellerUploadServlet extends HttpServlet
 		{
 			e.printStackTrace();
 		}
-		String splid = sellerid+itemid;
+		String splid = selleremail+catname1+subcatname1+itemid;
 		Client client = ClientBuilder.newClient();
 		WebTarget target = client.target(BASE_URI+PATH_NAME);
 		FlopkartListing item = new FlopkartListing();
 		item.setListingName(listingName);
-		item.setItemId(splid);    // creating unique itemid as (sellerid+itemid)
+		item.setItemId(splid);    // creating unique itemid as (selleremail+..+itemid)
 		item.setImgUrl(pic_url);
 		item.setSubcategoryId(sub_cat_content);
 		item.setBrand(brand);

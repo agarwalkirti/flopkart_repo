@@ -2745,7 +2745,7 @@ age-container #owl-main .owl-next {
 .product {
   position: relative;
 }
-.product .product-image img {width:100%}
+.product .product-image img {width:250px}
 
 .product .product-image .tag {
   position: absolute;

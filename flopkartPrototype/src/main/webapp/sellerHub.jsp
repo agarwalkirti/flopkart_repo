@@ -139,6 +139,7 @@
 <script src="./bootstrapFiles/js/wow.min.js"></script>
 <script src="./bootstrapFiles/js/scripts.js"></script>
 <script src="./customJavascripts/cookies.js"></script>
+<script src="./bootstrapFiles/js/sweetalert.min.js"></script>
 <script>
 $(document).ready(function(){
 	$("#warning_email_new").hide();
@@ -183,7 +184,7 @@ function formToJSON()
     	"password":password,
     	"userType":"seller"
     	});
-//	alert(flopkart_user);
+//	swal(flopkart_user);
 	return flopkart_user;
 }
 
@@ -198,20 +199,21 @@ function sellerLogin(){
 		{
 			if(result.id==0)
 			{
- 				alert("Invalid credentials");
+ 				swal("Invalid credentials");
  				window.location.reload(true);
 				return false;
 			}
 			else if(result.userType != "seller")
 			{
- 				alert("Register as seller first");
+ 				swal("Register as seller first");
  				window.location.reload(true);
 				return false;
 			}
 			setCookie("seller_details",JSON.stringify(result),30);
-			
-// 			alert(getCookie("seller_details"));
-			window.location.href = "sellerhome.jsp";
+
+			setTimeout(function(){
+				window.location.href = "sellerhome.jsp";
+			}, 2000);
 			return true;
 		},
 		error : err
@@ -223,7 +225,7 @@ function sellerLogin(){
 function err(error) 
 {	window.location.reload(true);
 	let x = error;
- //	alert(JSON.stringify(error)+" Enter valid login credentials");
+ //	swal(JSON.stringify(error)+" Enter valid login credentials");
 	return false;
 }
 

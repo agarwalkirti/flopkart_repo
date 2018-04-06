@@ -53,7 +53,7 @@
           <div id="myTabContent" class="tab-content category-list">
 			<div class="row">
 				<div style="border-bottom: 1px solid rgba(0, 0, 0, .1);">
-					<h2 style="margin-top:0; margin-left: 20px; font-size: 22px; font-family: Roboto, Arial, sans-serif; line-height: 32px; display: inline-block; font-weight: 500;">Deals of the Day</h2>
+					<h2 style="margin-top:0; margin-left: 20px; font-size: 22px; font-family: Roboto, Arial, sans-serif; line-height: 32px; display: inline-block; font-weight: 500;">Deals</h2>
 					<img src="./images/offerZone/timer.svg" height="24" width="24" style="position: relative; display: inline-block; margin-right: 8px; 
 					margin-left: 20px;"/>
 					<p id="timer" style="position: relative; display: inline-block; margin-right: 8px; 
@@ -91,7 +91,7 @@ $(document).ready(function(){
 var x = setInterval(function() {
 	
 	//Set the date we're counting down to
-	var countDownDate = new Date("Mar 24, 2018 23:59:59").getTime();
+	var countDownDate = new Date("Apr 30, 2018 23:59:59").getTime();
 	
     // Get todays date and time
     var now = new Date().getTime();
@@ -181,7 +181,7 @@ function dropdownCont(obj,ctxPath)
 //	var ctxPath = "http://localhost:8080/flopkartPrototype";
 		$.ajax(
 		{
-			type : 'POST',
+			type : 'GET',
 			contentType : 'application/json',
 			url : ctxPath + "/webapi/subcategories/category/"+categoryid,
 			dataType : "json", // data type of response

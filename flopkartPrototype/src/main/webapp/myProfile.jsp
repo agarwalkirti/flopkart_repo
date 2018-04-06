@@ -85,17 +85,17 @@
             
             <!-- ============================================== Other TAGS ============================================== -->
           <!----------- Account------------->
-            <div class="sidebar-widget  wow fadeInUp outer-top-vs " style="visibility: hidden; animation-name: none;">
-              <h5 class="head"><b>MY ORDERS</b></h5>
-            </div>
-                    <div class="side-menu animate-dropdown outer-bottom-xs">
-          <div class="head"><i class="icon fa fa-align-justify fa-fw"></i>Account Settings</div>
+          <br/>
+              <div class="side-menu animate-dropdown outer-bottom-xs">
+          			<div class="head"><i class="fas fa-list"></i><a href="myOrder.jsp" style="color:black" onmouseleave="style='color:black'" onmouseenter="style='color:blue'"> My Orders </a></div>
+          	  </div>
+       <div class="side-menu animate-dropdown outer-bottom-xs">
+          <div class="head"><i class="icon fa fa-user"></i>Account Settings</div>
 			<div class="sidebar-widget wow fadeInUp" style="visibility: hidden; animation-name: none;">
             	
               <div class="sidebar-widget-body">
                 <ul class="list">
-                  <li><h5><a href="underConstruct.html">Profile Information</a></h5></li>
-                  <li><h5><a href="underConstruct.html">Manage Addresses</a></h5></li>
+                  <li><h5><a href="myProfile.jsp">Profile Information</a></h5></li>
                   <li><h5><a href="underConstruct.html">Notification Preferences</a></h5></li>
                 </ul>
               </div>
@@ -104,14 +104,28 @@
             <!-- /.sidebar-widget --> 
           <!-- /.megamenu-horizontal --> 
         </div>
-        <!-- /.side-menu -->  
-                    <div class="side-menu animate-dropdown outer-bottom-xs">
-          <div class="head"><i class="icon fa fa-align-justify fa-fw"></i>My Stuff</div>
+        <div class="side-menu animate-dropdown outer-bottom-xs">
+          <div class="head"><i class="icon fa fa-credit-card"></i>Payments</div>
 			<div class="sidebar-widget wow fadeInUp" style="visibility: hidden; animation-name: none;">
             	
               <div class="sidebar-widget-body">
                 <ul class="list">
-                  <li><h5><a href="underConstruct.html">My wishlist</a></h5></li>
+                  <li><h5><a href="flopkartAccount.jsp">Flopkart Bank Account</a></h5></li>
+                </ul>
+              </div>
+              <!-- /.sidebar-widget-body --> 
+            </div>
+            <!-- /.sidebar-widget --> 
+          <!-- /.megamenu-horizontal --> 
+        </div>
+        <!-- /.side-menu -->  
+        <div class="side-menu animate-dropdown outer-bottom-xs">
+          <div class="head"><i class="icon fa fa-folder-open"></i>My Stuff</div>
+			<div class="sidebar-widget wow fadeInUp" style="visibility: hidden; animation-name: none;">
+            	
+              <div class="sidebar-widget-body">
+                <ul class="list">
+                  <li><h5><a href="wishlist.jsp">My Wishlist</a></h5></li>
                 </ul>
               </div>
               <!-- /.sidebar-widget-body --> 
@@ -257,17 +271,18 @@
          
         <div class="search-result-container ">
             <div class="sidebar-widget wow fadeInUp" style="visibility: hidden; animation-name: none;">
-              <div class="widget-header">
-                <h4 class="widget-title"><B>FAQS</B></h4>
+              <div style="font-size: 18px; font-weight: 700; margin-bottom: 24px;">
+                FAQs
               </div>
 	              
-              <div class="sidebar-widget-body">
-                <ul class="list">
-                  <li><h5><b>Question</b></h5></li>
-                  <li><h5>Answer</h5></li>
-                  <li><h5><b>Question</b></h5></li>
-                  <li><h5>Answer</h5></li>
-                </ul>
+              <div style="display: block">
+              	  <h4 style="margin-bottom: 5px; margin-top: 20px; padding: 0; line-height: 1.5; 
+              	    	font-weight: 700; font-size: 14px">What happens when I update my information?</h4>
+                  <p style="line-height: 1.5; margin-top: 15px;">Your updated information will be stored and used for all further purposes.</p>
+                  <h4 style="margin-bottom: 5px; margin-top: 20px; padding: 0; line-height: 1.5; 
+              	    	font-weight: 700; font-size: 14px">How do I pay online?</h4>
+                  <p style="line-height: 1.5; margin-top: 15px;">First, you create a Flopkart Bank account. Then, you add enough money so that you can enjoy 
+                  the online shopping experience!</p>
               </div>
         
               <!-- /.sidebar-widget-body --> 
@@ -286,6 +301,7 @@
      </div>
   <!-- /.container --> 
   </div>
+ </div>
 </div>
 <!-- /.body-content --> 
 </div>
@@ -481,7 +497,7 @@ $("#dp1").hover(function(){
 
 function diplayUser(user)
 {	
-	//alert(JSON.stringify(user));
+	//swal(JSON.stringify(user));
 	$('#firstName').val(user.firstName);
 	$('#lastName').val(user.lastName);
 	$('#ip_email').val(user.email);
@@ -609,12 +625,12 @@ function changepswd(ctxPath)
 		data : updatepswdJSON(),
 		success : function()
 		{
-			alert("Password SuccessFully Updated");
+			swal("Password SuccessFully Updated");
 			
 		},
 		error : function()
 		{
-				alert("Error");		
+				swal("Error");		
 		}
 		});
 }

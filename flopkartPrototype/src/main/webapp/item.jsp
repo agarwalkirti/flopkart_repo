@@ -27,6 +27,8 @@
 	box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .2);
 	border: none;
 	color: #fff;
+	text-align: center;
+	display: inline-block;
 	width: 48%;
 	padding: 18px 8px;
 	border-radius: 2px;
@@ -126,8 +128,8 @@
 								<div class="buynowdiv">
 									<form action="buyNow.jsp">
 										<button id="buynow" onclick="return checkLogin()" class="buynow">Buy Now</button>
-										<button class="addtocart" id="addtocart">Add to cart
-										</button>
+										<a href="#" onmouseover="style='color:white'" class="addtocart" id="addtocart">Add to cart </a>
+										<a href="cart.jsp" onmouseover="style='color:white'" class="addtocart" id="gotocart">Go to cart </a>
 										<input type="text" name="listingid"
 											value='<%=request.getParameter("id")%>' hidden="hidden">
 										<input type="number" id="quant" name="quant" hidden="hidden">
@@ -197,9 +199,6 @@
 													<a class='btn btn-primary' data-toggle='tooltip'
 														data-placement='right' title='Wishlist' href='#'> <i
 														class='fa fa-heart'></i>
-													</a> <a class='btn btn-primary' data-toggle='tooltip'
-														data-placement='right' title='Add to Compare' href='#'>
-														<i class='fa fa-signal'></i>
 													</a> <a class='btn btn-primary' data-toggle='tooltip'
 														data-placement='right' title='E-mail' href='#'> <i
 														class='fa fa-envelope'></i>
@@ -320,7 +319,7 @@ $(document).ready(function(){
 					dataType : "json", // data type of response
 					success : function(seller_json)
 					{
-						var sellerData = "<div id='sellerData' style='color:green; font-size:15px'>Seller name:   "+seller_json.firstName+" "+seller_json.lastName+"</span>";
+						var sellerData = "<div id='sellerData' style='color:green; font-size:15px'>Seller name:   "+seller_json.firstName+" "+seller_json.lastName+" (id: "+listing_json.sellerid+" )</span>";
 						$("#product-info").append(sellerData);
 						//alert(seller_json.firstName+" "+seller_json.lastName);
 						$("#sellername").val(seller_json.firstName+" "+seller_json.lastName);
@@ -356,6 +355,8 @@ $(document).ready(function(){
 	        	//alert("error occurred");
 	    	}
 		});
+		
+		$("#gotocart").hide();
 });
 
 $("#quant-up").click(function(){
@@ -441,9 +442,51 @@ function checkLogin()
 {
 	if(getCookie("user_details")=="") 
 	{
-		alert("Please Login");
+		swal("Please Login");
 		return false;
 	}
 }
+
+function itemToJSON() 
+{
+	var user = getCookie("user_details");
+	user = JSON.parse(user);
+	var userId = user.id;
+	var itemId = $("#itemid").val();
+	var quant = $("#quantity").val();
+	var flopkartCart = JSON.stringify({
+	    "userId" : userId,
+	    "itemId" : itemId,
+	    "quantity" : quant
+	});
+	alert(flopkartCart);
+	return flopkartCart;
+}
+
+function successCart(){
+	swal("Item added to your cart!");
+	$("#addtocart").hide();
+	$("#gotocart").show();
+}
+
+$("#addtocart").click(function(){
+	if(getCookie("user_details")=="") 
+	{
+		swal("Please Login");
+		return;
+	}
+	var ctxPath = "<%=request.getContextPath()%>";
+	$.ajax(
+		{
+			type : 'POST',
+			contentType : 'application/json',
+			url : ctxPath + "/webapi/cart/create",
+			data : itemToJSON(),
+			success : successCart(),
+			error: function() {
+				swal(JSON.stringify(err));
+			}
+	});
+});
 </script>
 </html>

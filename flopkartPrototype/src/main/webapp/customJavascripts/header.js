@@ -80,7 +80,7 @@ function dropdownContent(obj,ctxPath)
 //	var ctxPath = "http://localhost:8080/flopkartPrototype";
 		$.ajax(
 		{
-			type : 'POST',
+			type : 'GET',
 			contentType : 'application/json',
 			url : ctxPath + "/webapi/subcategories/category/"+categoryid,
 			dataType : "json", // data type of response

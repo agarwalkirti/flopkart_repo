@@ -1,8 +1,10 @@
 package com.iiitb.ooadvoid.dao;
 
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Order;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -23,6 +25,20 @@ public class HibernateDAO<E>
 		session.flush();
 		tx.commit();
 		session.close();
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<E> listSorted(E ent, String sortBy, int n)
+	{
+
+		session = SessionUtil.getSession();
+		session.flush();
+		Criteria c = session.createCriteria(ent.getClass());
+		c.addOrder(Order.desc(sortBy)).setMaxResults(n);
+		List<E> entity = c.list();
+		session.flush();
+		session.close();
+		return entity;
 	}
 
 	@SuppressWarnings("unchecked")

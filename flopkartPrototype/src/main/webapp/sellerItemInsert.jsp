@@ -64,6 +64,8 @@
 		              <input type="text" class="form-control input-lg"  name="itemid" id="itemid" required>
 		          </div>
 		         </div> 
+		         <input type="text" id="catname1" name="catname1" hidden="hidden"/>
+		         <input type="text" id="subcatname1" name="subcatname1" hidden="hidden"/>
         		</div>
       	</div>
   
@@ -268,6 +270,7 @@
 	           		<input type="submit" style="font-size:18px;color: white;
    							padding: 8px 20px; background-color: #4CAF50;" value="DONE"/>
 					<input type="text" id="sellerid" name="sellerid" hidden="hidden"/>
+	        			<input type="text" id="selleremail" name="selleremail" hidden="hidden"/>
 	        
 	            </div>   
         		</div>
@@ -297,6 +300,7 @@
 <script src="./bootstrapFiles/js/wow.min.js"></script> 
 <script src="./bootstrapFiles/js/scripts.js"></script>
 <script src="./customJavascripts/cookies.js"></script>
+<script src="./bootstrapFiles/js/sweetalert.min.js"></script>
 <script>
 $(document).ready(function(){
 	
@@ -314,7 +318,15 @@ $(document).ready(function(){
 
 		    $('#sub-cat-content').show();
 		    $('#sub-cat-head').show();
+		    var catId1 = getSelectedText('catId');
+		    $('#catname1').val(catId1);
 		    DispSubCat();
+		 });
+		
+		$("#sub-cat-content").on("change",function() {
+		    
+		    var subcatId1 = getSelectedText('subcatId');
+		    $('#subcatname1').val(subcatId1);
 		 });
 
 		$('#ADD').click(function(){
@@ -362,10 +374,11 @@ function checkCookie()
 		setCookie("seller_details", result, 30);
 		document.getElementById("sellername").innerText = user.firstName;
 		sellerId(user);
+		$('#selleremail').val(user.email);
 	
     } 
     else 
-    {	alert("Login failed. Try again.");
+    {	swal("Login failed. Try again.");
       	window.location = "sellerHub.jsp";
     		logout();
     }
@@ -386,13 +399,20 @@ function resetCookie()
     	logout();
     }
 }
+function getSelectedText(elementId) {
+    var elt = document.getElementById(elementId);
 
+    if (elt.selectedIndex == -1)
+        return null;
+
+    return elt.options[elt.selectedIndex].text;
+}
 
 function sellerId(user)
 {	
 	
 	$('#sellerid').val(user.id);
-	//alert(user.id);
+	//swal(user.id);
 	return true;
 	
 }
@@ -420,7 +440,7 @@ function logout()
 	            $('#cat-content').html(data);
 	    	},
 	    	error:function() {
-	        	//alert("error occurred");
+	        	//swal("error occurred");
 	    	}
 		});
 	}
@@ -430,7 +450,7 @@ function logout()
 		var ctxPath = "<%=request.getContextPath()%>";
 		if($("#catId").val()==0)
 			{
-			    alert("Select A Category");
+			    swal("Select A Category");
 			}
 		else
 		{

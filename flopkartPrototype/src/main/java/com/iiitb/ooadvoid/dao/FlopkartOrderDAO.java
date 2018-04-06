@@ -37,6 +37,11 @@ String entity_name = "FlopkartOrder";
 		return super.findAll(entity_name,"orderid", orderId);
 	}
 	
+	public FlopkartOrder getFlopkartOrderByOrderIdd(Integer orderId)
+	{		
+		return super.find(entity_name,"orderid", orderId);
+	}
+	
 	
 	
 	public List<FlopkartOrder> getFlopkartOrderByItemId(String itemId)

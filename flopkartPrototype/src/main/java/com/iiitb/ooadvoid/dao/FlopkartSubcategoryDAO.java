@@ -39,13 +39,13 @@ public class FlopkartSubcategoryDAO extends HibernateDAO<FlopkartSubcategory>
 		return 1;
 	}
 	
-	public List<FlopkartSubcategory> getFlopkartSubcategoryBysubcategoryId(FlopkartSubcategory subcategory)
-	{
-		int val =  subcategory.getCategoryId();
-		return super.findAll(entity_name,"categoryId",val);
-	}
+//	public List<FlopkartSubcategory> getFlopkartSubcategoryBysubcategoryId(FlopkartSubcategory subcategory)
+//	{
+//		int val =  subcategory.getCategoryId();
+//		return super.findAll(entity_name,"categoryId",val);
+//	}
 	
-	public List<FlopkartSubcategory> getFlopkartSubcategoryBysubcategoryId(Integer categoryid)
+	public List<FlopkartSubcategory> getFlopkartSubcategoryBycategoryId(Integer categoryid)
 	{
 		return super.findAll(entity_name,"categoryId",categoryid);
 	}

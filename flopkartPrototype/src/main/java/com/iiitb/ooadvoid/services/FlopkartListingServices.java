@@ -13,9 +13,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
 import com.iiitb.ooadvoid.pojo.FlopkartListing;
-import com.iiitb.ooadvoid.pojo.FlopkartSubcategory;
 import com.iiitb.ooadvoid.dao.FlopkartListingDAO;
-import com.iiitb.ooadvoid.dao.FlopkartSubcategoryDAO;
 
 @Path("/listings")
 public class FlopkartListingServices 
@@ -37,6 +35,26 @@ public class FlopkartListingServices
 	{
 		FlopkartListingDAO dao = new FlopkartListingDAO();
 		FlopkartListing listing_details = dao.getFlopkartListingById(id);
+		return listing_details;
+	}
+	
+	@GET
+	@Path("/item/{id}")
+	@Produces("application/json")
+	public FlopkartListing getFlopkartListingByItemId(@PathParam("id") String id)
+	{
+		FlopkartListingDAO dao = new FlopkartListingDAO();
+		FlopkartListing listing_details = dao.getFlopkartListingByItemId(id);
+		return listing_details;
+	}
+	
+	@GET
+	@Path("/date/{id}")
+	@Produces("application/json")
+	public List<FlopkartListing> getFlopkartListingByDate(@PathParam("id") int id)
+	{
+		FlopkartListingDAO dao = new FlopkartListingDAO();
+		List<FlopkartListing> listing_details = dao.getFlopkartListingsSortedByDate(id);
 		return listing_details;
 	}
 	
@@ -103,6 +121,21 @@ public class FlopkartListingServices
 	{
 		FlopkartListingDAO dao = new FlopkartListingDAO();
 		List<FlopkartListing> listing_details = dao.getFlopkartListingBysubcategoryId(id);
+		if(listing_details==null)
+			return null;
+		else
+			return listing_details;
+	}
+	
+
+	
+	@GET
+	@Path("/category/{id}")
+	@Produces("application/json")
+	public List<FlopkartListing> getListingByCategoryId(@PathParam("id") int id)
+	{
+		FlopkartListingDAO dao = new FlopkartListingDAO();
+		List<FlopkartListing> listing_details = dao.getFlopkartListingBycategoryId(id);
 		if(listing_details==null)
 			return null;
 		else

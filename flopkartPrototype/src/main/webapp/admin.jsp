@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="./bootstrapFiles/css/bootstrap.min.css">
 <link rel="stylesheet" href="./bootstrapFiles/css/SellerRegStyle.css">
 </head>
-<body style="background: url(&quot;./images/sellerHub/Signup-screen-BG.jpg&quot;) no-repeat;
+<body style="background: url(&quot;./images/sellerHub/Signup-screen-BG.jpg&quot;);
   background-size: 100%;">
 	<header>
 		<nav class="nav navbar-default" style="background-color:#027cd5">
@@ -17,35 +17,189 @@
 			<div style="float:right; padding-top:30px; padding-right: 5px"><a style="text-decoration:underline; color:white;font-size: 20px; font-weight:500;" href="adminDeals.jsp">Click here to add new deal category</a></div>
 		</nav>
 	</header>
+	<div class="row" style="margin-top:20px">
+				<div class="col-md-1"></div>
+				<div class="col-md-5">
+					<div class="panel-group checkout-steps" id="accordion">
+						<!-- categories  -->
+						<div  id="categories_panel" class="panel panel-default checkout-step-01" >
+						    
+						    <!-- panel-heading -->
+							<div class="panel-heading">
+					    	<h4 class="unicase-checkout-title">
+						        <a data-toggle="collapse" class="" data-parent="#accordion"
+						        href="#collapseCategories">Categories</a>
+						     </h4>
+					    	</div>	    
+					    	<!-- panel-heading -->
 	
-	<br/><br/>
-	<div class="col-md-6">
-		<div class="container" style="text-align: center; width: 400px">
-			<h3 style="color:white">Enter new category</h3><br/>
-			<form>
-				<input class="form-control" type="text" id="catName"
-					placeholder="Enter category name"> 
-				<br/>
-				<input type="submit"
-					onclick="insertCategory();" />
-			</form>
-		</div>
+							<!-- panel-body  -->
+							<div id="#collapseCategories" class="panel-collapse collapse in">
+							    <div class="panel-body">
+							    	<ul class="list-group" id="categoryList">
+									</ul>
+							       <div class="container">
+									<h4>Enter new category</h4><br/>
+									<form id="form1">
+										<input class="form-control" type="text" id="catName"
+											placeholder="Enter category name"> 
+										<br/>
+										<input type="submit" class="btn btn-primary"
+											onclick="insertCategory();" />
+									</form>
+								</div>		
+								</div>
+							</div>
+							<!-- panel-body  --><!-- row -->
+							
+							
+						</div>
+						<!-- End checkout-step-01  -->
+						
+					</div><!-- /.checkout-steps -->
+					
+				
+					
+				</div>
+				<div class="col-md-5">
+					<div class="panel-group checkout-steps" id="accordion">
+						<!-- categories  -->
+						<div  id="subcategories_panel" class="panel panel-default checkout-step-01" >
+						    
+						    <!-- panel-heading -->
+							<div class="panel-heading">
+					    	<h4 class="unicase-checkout-title">
+						        <a data-toggle="collapse" class="" data-parent="#accordion"
+						        href="#collapseSubcategories">Sub-Categories</a>
+						     </h4>
+					    	</div>	    
+					    	<!-- panel-heading -->
+	
+							<!-- panel-body  -->
+							<div id="#collapseSubcategories" class="panel-collapse collapse in">
+							    <div class="panel-body">
+							       <div class="container">
+									<form id="form2">
+										<div id="content"></div><br/>
+										<input type="button" class="btn btn-warning" onclick="DispSubCat()" value="Subcategories">
+										<br/>
+							    	<ul class="list-group" id="SubCat">
+									</ul>
+									<h4>Enter new subcategory</h4>
+										<br /> <input class="form-control" type="text" id="subcatName"
+											placeholder="Enter subcategory name"> 
+										<br/>
+										<input type="submit" class="btn btn-primary"
+											onclick="return insertSubcategory();" />
+									</form>
+								</div>		
+								</div>
+							</div>
+							<!-- panel-body  --><!-- row -->
+							
+							
+						</div>
+						<!-- End checkout-step-01  -->
+						
+					</div><!-- /.checkout-steps -->
+					
+				
+					
+				</div>
 	</div>
-	<div class="col-md-6">
-		<div class="container" style="text-align: center; width: 400px">
-			<h3 style="color:white">Enter new subcategory</h3><br/>
-			<form>
-				<div id="content"></div>
-				<div style="font-size:20px; color:white" onclick="DispSubCat()">Subcategories
-				<div id="SubCat"></div></div>
-				<br /> <input class="form-control" type="text" id="subcatName"
-					placeholder="Enter subcategory name"> 
-				<br/>
-				<input type="submit"
-					onclick="return insertSubcategory();" />
-			</form>
-		</div>
-	</div>
+	<div class="row" style="margin-top:20px">
+			<div class="col-md-1"></div>
+				<div class="col-md-10">
+					<div class="panel-group checkout-steps" id="accordion">
+						<!-- checkout-step-01  -->
+						<div  id="user_panel" class="panel panel-default checkout-step-01" >
+						    
+						    <!-- panel-heading -->
+							<div class="panel-heading">
+					    	<h4 class="unicase-checkout-title">
+						        <a data-toggle="collapse" class="" data-parent="#accordion"
+						        href="#collapseUser">Users</a>
+						     </h4>
+					    	</div>	    
+					    	<!-- panel-heading -->
+	
+							<!-- panel-body  -->
+							<div id="collapseUser" class="panel-collapse collapse in">
+							    <div class="panel-body">
+									<div class="table-responsive">          
+									  <table id="user_table" class="table">
+									  <thead>
+								    	<tr>
+								    		<th>User Name</th>
+								    		<th>UserId (Email)</th>
+								    		<th>Encoded Password</th>
+										</tr>
+								    	</thead>
+								    	<tbody id="userTable_body">
+								    	</tbody>
+								    </table>
+							       </div>			
+								</div>
+							</div>
+							<!-- panel-body  --><!-- row -->
+							
+							
+						</div>
+						<!-- End checkout-step-01  -->
+						
+					</div><!-- /.checkout-steps -->
+					
+				
+					
+				</div>
+				</div>
+			<div class="row" style="margin-top:20px">
+				<div class="col-md-1"></div>
+				<div class="col-md-10">
+					<div class="panel-group checkout-steps" id="accordion">
+						<!-- checkout-step-02  -->
+						<div  id="seller_panel" class="panel panel-default checkout-step-01" >
+						    
+						    <!-- panel-heading -->
+							<div class="panel-heading">
+					    	<h4 class="unicase-checkout-title">
+						        <a data-toggle="collapse" class="" data-parent="#accordion"
+						        href="#collapseSeller">Sellers</a>
+						     </h4>
+					    	</div>	    
+					    	<!-- panel-heading -->
+	
+							<!-- panel-body  -->
+							<div id="collapseSeller" class="panel-collapse collapse in">
+							    <div class="panel-body">
+									<div class="table-responsive">          
+									  <table id="user_table" class="table">
+									  <thead>
+								    	<tr>
+								    		<th>Seller Name</th>
+								    		<th>SellerId (Email)</th>
+								    		<th>Encoded Password</th>
+										</tr>
+								    	</thead>
+								    	<tbody id="sellerTable_body">
+								    	</tbody>
+								    </table>
+							       </div>			
+								</div>
+							</div>
+							<!-- panel-body  --><!-- row -->
+							
+							
+						</div>
+						<!-- End checkout-step-01  -->
+						
+					</div><!-- /.checkout-steps -->
+					
+				
+					
+				</div>
+				
+			</div>
 </body>
 
 <script src="./bootstrapFiles/js/jquery-1.11.1.min.js"></script>
@@ -59,6 +213,7 @@
 <script src="./bootstrapFiles/js/bootstrap-select.min.js"></script>
 <script src="./bootstrapFiles/js/wow.min.js"></script>
 <script src="./bootstrapFiles/js/scripts.js"></script>
+<script src="./bootstrapFiles/js/sweetalert.min.js"></script>
 <script>
 $(document).ready(function(){
 
@@ -67,8 +222,38 @@ $(document).ready(function(){
 <%-- 	var test = "<%=test1%>"; --%>
 // 	alert(test);
 	fetch();
+	fetchUsers() ;
 
 });
+function fetchUsers() 
+{
+    var ctxPath = "<%=request.getContextPath()%>";
+	$.ajax(
+	{
+		type : 'GET',
+		contentType : 'application/json',
+		url : ctxPath + "/webapi/users",
+		dataType : "json", // data type of response
+		success : function(users_json)
+		{
+            for(var i in users_json)
+            {
+            	var data =  "<tr><td>"+users_json[i].firstName+" "+users_json[i].lastName+"</td>"+
+				"<td>"+users_json[i].email+"</td>"+
+				"<td>"+users_json[i].password+"</td>"+
+            				"</tr>";
+            	if(users_json[i].userType==="seller")
+            		$("#sellerTable_body").append(data);
+            	else
+            		$("#userTable_body").append(data);
+            }
+    	},
+    	error:function() 
+    	{
+        	swal("error occurred");
+    	}
+	});
+}
 function fetch() 
 {
     var ctxPath = "<%=request.getContextPath()%>";
@@ -79,9 +264,11 @@ function fetch()
 		url : ctxPath + "/webapi/categories",
 		dataType : "json", // data type of response
 		success : function(result){
-			var data="<select id='catId'>"+"<option value=' "+ 0 +" '>Select a category</option>";
+			var data="<select  class='form-control' id='catId'>"+"<option value=' "+ 0 +" '>Select a category</option>";
             for(var i in result){
                data+="<option value='"+result[i].id+"'>"+result[i].categoryName+"</option>";
+           		var data1 =  "<li class='list-group-item'>"+result[i].categoryName+"</li>";
+        		$("#categoryList").append(data1);
             }
             data += "</select>";
             $('#content').html(data);
@@ -114,16 +301,16 @@ function formToJSON1()
 	return flopkartCat;
 }
 
-function formToJSON2()
-{
-	var categoryId = $("#catId").val();
-	var subcategoryName = "";
-	var flopkartSubCat = JSON.stringify({
-	    "categoryId" : categoryId,
-	    "subcategoryName" : subcategoryName
-	});
-	return flopkartSubCat;
-}
+// function formToJSON2()
+// {
+// 	var categoryId = $("#catId").val();
+// 	var subcategoryName = "";
+// 	var flopkartSubCat = JSON.stringify({
+// 	    "categoryId" : categoryId,
+// 	    "subcategoryName" : subcategoryName
+// 	});
+// 	return flopkartSubCat;
+// }
 
 function insertSubcategory() 
 {
@@ -136,13 +323,13 @@ function insertSubcategory()
 			data : formToJSON(),
 			success : render(),
 			error: function() {
-				alert(JSON.stringify(err));
+				swal(JSON.stringify(err));
 			}
 	});
 }
 
 function render(){
-	alert("Succesful entry into the database");
+	swal("Succesful entry into the database");
 	window.location.reload(true);
 }
 
@@ -157,7 +344,7 @@ function insertCategory()
 			data : formToJSON1(),
 			success : render(),
 			error: function() {
-				alert(JSON.stringify(err));
+				swal(JSON.stringify(err));
 			}
 	});
 }
@@ -167,26 +354,26 @@ function DispSubCat()
 	var ctxPath = "<%=request.getContextPath()%>";
 	if($("#catId").val()==0)
 		{
-		    alert("Select A Category");
+		    swal("Select A Category");
 		}
 	else
 	{
+		var categoryId = $("#catId").val();
 	$.ajax(
 	{
-		type : 'POST',
+		type : 'GET',
 		contentType : 'application/json',
-		url : ctxPath + "/webapi/subcategories/categoryId",
+		url : ctxPath + "/webapi/subcategories/category/"+categoryId,
 		dataType : "json", // data type of response
-		data : formToJSON2(),
 		success : function(result){
 			var data="";
             for(var i in result){
-            	data+="<li style='background-color:black; text-align:left'>"+result[i].subcategoryName+"</li>";
+            	data+="<li class='list-group-item'>"+result[i].subcategoryName+"</li>";
             }
             $('#SubCat').html(data);
     	},
     	error:function(data,status) {
-    		alert("Data: " + data + "\nStatus: " + status);
+    		swal("Data: " + data + "\nStatus: " + status);
         	//alert("error occurred");
     	}
 	});

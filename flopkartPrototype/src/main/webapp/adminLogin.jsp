@@ -44,6 +44,7 @@
 <script src="./bootstrapFiles/js/bootstrap-select.min.js"></script>
 <script src="./bootstrapFiles/js/wow.min.js"></script>
 <script src="./bootstrapFiles/js/scripts.js"></script>
+<script src="./bootstrapFiles/js/sweetalert.min.js"></script>
 <script>
 function adminLogin(){
 	var email = $("#email").val();
@@ -52,7 +53,7 @@ function adminLogin(){
 		return true;
 	}
 	else
-		alert("Wrong credentials. Try again");
+		swal("Wrong credentials. Try again");
 		return false;
 }
 </script>
