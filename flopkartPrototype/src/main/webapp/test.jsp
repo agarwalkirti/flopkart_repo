@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ page import="com.iiitb.ooadvoid.AccessProperties"%>
 <!DOCTYPE html>
 <html>
 <!-- Use this page as a template to create new pages-->

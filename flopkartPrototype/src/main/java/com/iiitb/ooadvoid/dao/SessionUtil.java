@@ -1,5 +1,6 @@
 package com.iiitb.ooadvoid.dao;
 
+import org.hibernate.Cache;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -12,6 +13,7 @@ public class SessionUtil
 	private static SessionUtil instance = new SessionUtil();
 	private SessionFactory sessionFactory;
 	private ServiceRegistry serviceRegistry;
+	Cache cache;
 
 	public static SessionUtil getInstance()
 	{
@@ -25,11 +27,21 @@ public class SessionUtil
 		serviceRegistry = new StandardServiceRegistryBuilder().applySettings(
 	            configuration.getProperties()).build();
 	    sessionFactory = configuration.buildSessionFactory(serviceRegistry);
+	    cache = sessionFactory.getCache();
 	}
 
 	public static Session getSession()
 	{
-		Session session = getInstance().sessionFactory.openSession();
+		SessionUtil s = getInstance();
+		Session session = s.sessionFactory.openSession();
+		if (session != null) 
+		{
+		    session.clear(); // internal cache clear
+		}
+		if (s.cache != null) 
+		{
+		    s.cache.evictAllRegions(); // Evict data from all query regions.
+		}
 		return session;
 	}
 }

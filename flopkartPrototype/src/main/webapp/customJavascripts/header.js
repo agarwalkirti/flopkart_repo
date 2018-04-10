@@ -176,19 +176,23 @@ function signup(ctxPath)
 		$("#warning_pass_new").show();
 		return false;
 	}
-		$.ajax(
-		{
-		type : 'POST',
-		contentType : 'application/json',
-		url : ctxPath + "/webapi/users/create",
-		dataType : "json", // data type of response
-		data : signupformToJSON(),
-		success : renderDetails,
-		error : function()
-				{
-					findUser(ctxPath);
+	$.ajax(
+	{
+	type : 'POST',
+	async: false,
+	contentType : 'application/json',
+	url : ctxPath + "/webapi/users/create",
+	dataType : "json", // data type of response
+	data : signupformToJSON(),
+	success : renderDetails,
+	error : function(err)
+			{
+				alert(JSON.stringify(err));
+				var status = err.status;
+				if(status==200){
 				}
-		});
+			}
+	});
 }
 
 function renderDetails(user)
@@ -204,8 +208,8 @@ function renderDetails(user)
 	else
 	{
 		showUser(user);
-		setCookie("user_details", JSON.stringify(user), 1);
-		$('#loginModal').modal('toggle');
+		setCookie("user_details", JSON.stringify(user), 30);
+		$('#loginModal').modal('hide');
 	}
 
 	return false;
@@ -304,5 +308,76 @@ function findUser(ctxPath)
 		dataType : "json", // data type of response
 		data : formToJSON(),
 		success : renderDetails
-});
+    });
 }
+	
+function onSignIn(googleUser) {
+	  var profile = googleUser.getBasicProfile();
+	  console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+	  console.log('Name: ' + profile.getName());
+	  console.log('Image URL: ' + profile.getImageUrl());
+	  console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+	  
+	  var flipkart_user = JSON.stringify({
+	    	"email":profile.getEmail(),
+	    	"password": "password"
+	    });
+	  
+	  $.ajax({
+		type : 'POST',
+		async: false,
+		contentType : 'application/json',
+		url : "http://localhost:8080/flopkartPrototype/webapi/users/email",
+		dataType : "json", // data type of response
+		data : flipkart_user,
+		success : function(user)
+		{
+			renderDetailsGoogle(user,profile);
+		}
+	 });
+}
+
+function renderDetailsGoogle(user,profile)
+{ 
+	var flipkart_user = JSON.stringify({
+		"firstName":profile.getName(),
+  		"email":profile.getEmail(),
+  		"password":"password",
+  		"userType":"customer"
+  });
+	
+	if (user == null)
+	{
+		$.ajax({
+			type : 'POST',
+			async: false,
+			contentType : 'application/json',
+			url : "http://localhost:8080/flopkartPrototype/webapi/users/create",
+			dataType : "json", // data type of response
+			data : flipkart_user,
+			success : signupGoogle,
+			error: signupGoogle
+		});
+	}
+	else
+	{
+		showUser(user);
+		setCookie("user_details", JSON.stringify(user), 30);
+		$('#loginModal').modal('hide');
+	}
+	return false;
+}
+
+function signupGoogle(user){
+	alert(JSON.stringify(user));
+	showUser(user);
+	setCookie("user_details", JSON.stringify(user), 30);
+	$('#loginModal').modal('hide');
+}
+
+function signOut() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+    });
+ }

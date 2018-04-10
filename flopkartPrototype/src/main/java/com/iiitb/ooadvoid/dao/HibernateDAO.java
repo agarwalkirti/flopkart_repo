@@ -36,6 +36,7 @@ public class HibernateDAO<E>
 		Criteria c = session.createCriteria(ent.getClass());
 		c.addOrder(Order.desc(sortBy)).setMaxResults(n);
 		List<E> entity = c.list();
+		session.clear();
 		session.flush();
 		session.close();
 		return entity;
@@ -49,6 +50,7 @@ public class HibernateDAO<E>
 		session.flush();
 		Query query = session.createQuery("from "+ent.getClass().getName());
 		List<E> entity = query.list();
+		session.clear();
 		session.flush();
 		session.close();
 		return entity;
@@ -61,6 +63,7 @@ public class HibernateDAO<E>
 		tx = session.beginTransaction();
 		@SuppressWarnings("unchecked")
 		E ent = (E) session.get(entity.getClass(), new Integer(id));
+		session.evict(ent);
 		tx.commit();
 		session.flush();
 		session.close();
@@ -166,6 +169,7 @@ public class HibernateDAO<E>
 		Query query = session.createQuery(hql);
 		query.setParameter("val", val);
 		List<E> entity = query.list();
+		session.clear();
 		session.flush();
 		session.close();
 		if (entity.size() == 0)
@@ -198,6 +202,7 @@ public class HibernateDAO<E>
 		query.setParameter("val1", val1);
 		query.setParameter("val2", val2);
 		List<E> entity = query.list();
+		session.clear();
 		session.flush();
 		session.close();
 		if (entity.size() == 0)
@@ -214,6 +219,7 @@ public class HibernateDAO<E>
 		Query query = session.createQuery(hql);
 		query.setParameter("val1", val1);
 		List<E> entity = query.list();
+		session.clear();
 		session.flush();
 		session.close();
 		return entity;
@@ -228,6 +234,7 @@ public class HibernateDAO<E>
 		Query query = session.createQuery(hql);
 		query.setParameter("val1", val1);
 		List<E> entity = query.list();
+		session.clear();
 		session.flush();
 		session.close();
 		return entity;
@@ -243,6 +250,7 @@ public class HibernateDAO<E>
 		query.setParameter("val1", val1);
 		query.setParameter("val2", val2);
 		List<E> entity = query.list();
+		session.clear();
 		session.flush();
 		session.close();
 		return entity;
@@ -258,6 +266,7 @@ public class HibernateDAO<E>
 		query.setParameter("val1", val1);
 		query.setParameter("val2", val2);
 		List<E> entity = query.list();
+		session.clear();
 		session.flush();
 		session.close();
 		return entity;

@@ -146,15 +146,19 @@
 								    	</thead>
 								    	<tbody id="orderSummary_body">
 								    	<tr>
-								    		<th colspan="3">Total Price:</th>
-								    		<td id="calc"></td>
+								    		<th colspan="2">Total Price:</th>
+								    		<td id="calc" colspan="2">
+								    			<input hidden="hidden" type="number" id='total-text' value='0' >
+								    			<span><span id='total-span'></span>&nbsp;-&nbsp;<span id='min-span'></span></span>
+								    			<input hidden="hidden" type="number" id='minimum' >
+								    		</td>
 	
 	
 								    		<th id="total_th">0</th>
 								    	</tr>
 								    	</tbody>
 								    </table>
-							    </div>                       
+							    </div>                      
 							   
 	                              <div class="row">
 		                            <div class="col-md-3">
@@ -283,47 +287,34 @@
      
 </body>
 <script>
+var deduct = false;
 $(document).ready(function()
 {
+
 	$("#arrow_order").hide();
 	$("#orderStatus").hide();
     var ctxPath = "<%=request.getContextPath()%>";
-    var listingid = "<%=request.getParameter("listingid")%>";
 	headerFunctions(ctxPath);    
-	var user = getCookie("user_details");
-    if (user == "") 
-    {
-    	swal("Please Login");
-    	document.location.href="index.jsp";
-    }
 	show_Welcome();
-	if(listingid!="0")
-	{
-		displayOrderSummary(listingid);
-	}
-	else
-	{
-		fetchCart();
-	}
+	fetchCombo();
 })
 
 
-function fetchCart()
+function fetchCombo()
 {
 	var ctxPath = "<%=request.getContextPath()%>";
-	var user = getCookie("user_details");
-	user = JSON.parse(user);
-	var userId = user.id;
+    var comboid = "<%=request.getParameter("comboid")%>";
 	$.ajax(
 	{
 				type : 'GET',
 				contentType : 'application/json',
-				url : ctxPath + "/webapi/cart/user/"+userId,
-				success : function(cart_json)
+				url : ctxPath + "/webapi/listingDeals/combo/"+comboid,
+				success : function(combo_json)
 				{
-					for(i = 0; i< cart_json.length; i++)
+					$('#minimum').val(Number.MAX_VALUE);
+					for(i = 0; i< combo_json.length; i++)
 					{
-						dispOrders(cart_json[i],i);
+						dispOrders(combo_json[i],i);
 					}
 				},
 				error: function(err) 
@@ -333,17 +324,14 @@ function fetchCart()
 		});
 }
 
-function dispOrders(cart_json,i)
+function dispOrders(combo_json,i)
 {
 	var ctxPath = "<%=request.getContextPath()%>";
-	var user = getCookie("user_details");
-	user = JSON.parse(user);
-	var userId = user.id;
 	$.ajax(
 			{
 				type : 'GET',
 				contentType : 'application/json',
-				url : ctxPath + "/webapi/listings/item/"+cart_json.itemId,
+				url : ctxPath + "/webapi/listings/"+combo_json.listingid,
 				success : function(listing_json)
 				{
 					if(listing_json.quantity>0)
@@ -356,16 +344,17 @@ function dispOrders(cart_json,i)
 								url : ctxPath + "/webapi/users/"+listing_json.sellerid,
 								success : function(seller_json)
 								{
-									var total = parseInt($("#total_th").text());
-									var newQuant = listing_json.quantity - cart_json.quantity;
+									var total = parseInt($("#total-text").val());
+									var min = $("#minimum").val();
+									var newQuant = listing_json.quantity - 1;
 									var table_data =  	"<tr id='"+i+"' style='text-align: left'>"+
 							    	"	<td>"+listing_json.listingName+
 							    	"<input type='number' id='listingid"+i+"' value='"+listing_json.id+"' hidden='hidden'>"+
 							    	"<input type='text' id='itemid"+i+"' value='"+listing_json.itemId+"' hidden='hidden'>"+
 							    	"<input type='number' id='new_quant"+i+"' value='"+newQuant+"' hidden='hidden'>"+
-							    	"<input type='number' id='cartid"+i+"'  value='"+cart_json.id+"' hidden='hidden'>"+
+							    	"<input type='number' id='comboid"+i+"'  value='"+combo_json.id+"' hidden='hidden'>"+
 							    	"</td>"+
-							    	"	<td id='quant"+i+"'>"+cart_json.quantity+"</td>"+
+							    	"	<td id='quant"+i+"'>"+1+"</td>"+
 							    	"	<td>"+listing_json.price+"</td>"+
 							    	"	<td>"+listing_json.discount+"%</td>"+
 							    	"	<td id='price"+i+"' class='classPrice'>"+actualPrice+"</td>"+
@@ -373,14 +362,24 @@ function dispOrders(cart_json,i)
 							    	seller_json.firstName+" "+seller_json.lastName+"</td>"+
 							    	"</tr>";
 							    	$("#orderSummary_body").prepend(table_data);
-							    	total = total + (actualPrice*cart_json.quantity);
-							    	$("#total_th").html(total);
+							    	total = total + (actualPrice);
+							    	$("#total-text").val(total);
+							    	min = Math.min(min,actualPrice);
+							    	$("#minimum").val(min);
+							    	$("#min-span").html(min);
+							    	$("#total-span").html(total);
+							    	$("#total_th").html(total-min);
 								},
 								error: function(err) 
 								{
 									swal(JSON.stringify(err));
 								}
 							});
+					}
+					else
+					{
+						swal("Sorry for the inconvinence","Cannot place the Deal as one of the items in the deal is out of stock.");
+						document.location.href="index.jsp";
 					}
 				},
 				error: function(err) 
@@ -389,87 +388,6 @@ function dispOrders(cart_json,i)
 				}
 		});
 }
-
-function displayOrderSummary(id)
-{
-	var ctxPath = "<%=request.getContextPath()%>";
-	var total = parseInt($("#total_th").text());
-	var user = getCookie("user_details");
-	user = JSON.parse(user);
-	var userId = user.id;
-	$.ajax(
-			{
-				type : 'GET',
-				contentType : 'application/json',
-				url : ctxPath + "/webapi/listings/"+id,
-				success : function(listing_json)
-				{
-					var actualPrice = listing_json.price - (listing_json.discount*listing_json.price/100);
-					$.ajax(
-							{
-								type : 'GET',
-								contentType : 'application/json',
-								url : ctxPath + "/webapi/users/"+listing_json.sellerid,
-								success : function(seller_json)
-								{
-							    	//alert("Listing quant: "+ listing_json.quantity);
-									var table_data =  	"<tr id='0' style='text-align: left'>"+
-							    	"	<td>"+listing_json.listingName+
-							    	"<input type='number' id='listingid0' value='"+listing_json.id+"' hidden='hidden'>"+
-							    	"<input type='text' id='itemid0' value='"+listing_json.itemId+"' hidden='hidden'>"+
-							    	"<input type='number' id='new_quant0' value='"+listing_json.quantity+"' hidden='hidden'>"+
-							    	"<input type='number' id='cartid0' hidden='hidden'>"+
-							    	"</td>"+
-							    	"	<td id='quant0'></td>"+
-							    	"	<td>"+listing_json.price+"</td>"+
-							    	"	<td>"+listing_json.discount+"%</td>"+
-							    	"	<td id='price0' class='classPrice'>"+actualPrice+"</td>"+
-							    	"	<td class='pull-right' style='text-align: right;color:green'>"+
-							    	seller_json.firstName+" "+seller_json.lastName+"</td>"+
-							    	"</tr>";
-							    	$("#orderSummary_body").prepend(table_data);
-								},
-								error: function(err) 
-								{
-									swal(JSON.stringify(err));
-								}
-						});
-					$.ajax(
-							{
-								type : 'POST',
-								contentType : 'application/json',
-								url : ctxPath + "/webapi/cart/user/listingid/"+id,
-								data: JSON.stringify(
-										{
-											"userId":userId
-										}
-										),
-								success : function(cart_json)
-								{
-									var curr_quant = $("#new_quant0").val();
-							    	//alert("Curr quant: "+ $("#new_quant0").val());
-							    	$("#quant0").html(cart_json.quantity);
-							    	total = total + (actualPrice*cart_json.quantity);
-							    	$("#new_quant0").val(curr_quant - cart_json.quantity);
-							    	//alert("New quant: "+ $("#new_quant0").val());
-							    	$("#cartid0").val(cart_json.id)
-							    	$("#total_th").html(total);
-								},
-								error: function(err) 
-								{
-									swal(JSON.stringify(err));
-								}
-						});
-				},
-				error: function(err) 
-				{
-					swal(JSON.stringify(err));
-				}
-		});
-	
-}
-
-
 
 function buynowvalidation() 
 {
@@ -606,16 +524,7 @@ function insertOrders()
 			showAddress();
 		}
 		else
-		{
-		    var listingid = "<%=request.getParameter("listingid")%>";
-			if(listingid!="0")
-			{
-				var listingid = $("#listingid0").val();
-				var new_quant = $("#new_quant0").val();
-				insertOrder(listingid,new_quant,0);
-			}
-			else
-			{      
+		{     
 				$('#order_table > tbody > tr').each(function(i,row) 
 					{
 		
@@ -628,7 +537,6 @@ function insertOrders()
 					        	
 					        }
 					 });
-			}
 		}
 	}
 }
@@ -644,11 +552,11 @@ function insertOrder(listingid,new_quant,rowid)
 			data : order_formToJSON(rowid),
 			success : function(data) 
 			{
+				hideOrder();
+				showPayment();
 				$("#confirmOrder").prop('disabled', true);
 				$("#arrow_order").show();
 				$("#orderStatus").show();
-				hideOrder();
-				showPayment();
 			},
 			error: function(err) 
 			{
@@ -660,6 +568,7 @@ function insertOrder(listingid,new_quant,rowid)
 
 function order_formToJSON(rowid) 
 {
+	//alert( $("#itemid"+rowid).val());
 	var shipAddress = $("#shipAddress").val().trim();	
 	<%Timestamp timeStamp = new Timestamp(System.currentTimeMillis());
 	  int orderid = Math.abs((int)timeStamp.getTime());%>
@@ -667,6 +576,11 @@ function order_formToJSON(rowid)
     var user = getCookie("user_details");
 	var userid = JSON.parse(user).id;
 	var TotalAmount = parseInt($("#quant"+rowid).text()) * parseInt($("#price"+rowid).text());
+	if(!deduct && $("#minimum").val()==TotalAmount)
+	{
+		deduct=true;
+		TotalAmount=0;
+	}
 	<%
 	Date myDate = new Date();
 	String today = new SimpleDateFormat("yyyy-MM-dd").format(myDate);%>
@@ -688,35 +602,6 @@ function order_formToJSON(rowid)
 function flopkartBank()
 {
 	
-}
-
-function displayDetails(id)
-{
-	var ctxPath = "<%=request.getContextPath()%>";
-	
-	var total = parseInt($("#total_th").text());
-	$.ajax(
-			{
-				type : 'GET',
-				contentType : 'application/json',
-				url : ctxPath + "/webapi/listings/"+id,
-				success : function(listing_json)
-				{
-					var actualPrice = listing_json.price - (listing_json.discount*listing_json.price/100);
-					var table_data =  	"<tr>"+
-			    	"	<td>"+listing_json.listingName+"</td>"+
-			    	"	<td>1</td>"+
-			    	"	<td>"+listing_json.price+"</td>"+
-			    	"	<td>"+listing_json.discount+"%</td>"+
-			    	"	<td class='classPrice'>"+actualPrice+"</td>"+
-			    	"</tr>";
-			    	$("#orderSummary_body").prepend(table_data);
-				},
-				error: function(err) 
-				{
-					swal(JSON.stringify(err));
-				}
-		});
 }
 
 
@@ -847,16 +732,12 @@ function deductBalance(amt,id)
 					    		var listingid = $("#listingid"+rowid).val();
 					    		var new_quant = $("#new_quant"+rowid).val();
 				 				updateOrder("Money Paid",parseInt(rowid));
-				 				deleteFromCart(parseInt(rowid));
 								updateQuant(listingid,new_quant);
 					        }
 					 });
 				swal("Order placed successfully!", {
 				      icon: "success",
 				});
-				var listingid = "<%=request.getParameter("listingid")%>";
-				if(listingid!='0')
- 					addwalletmoney();
  				
 			},
 			error: function(err) 
@@ -864,94 +745,6 @@ function deductBalance(amt,id)
 				swal(JSON.stringify(err));
 			}
 	});
-}
-
-
-function deleteFromCart(rowid)
-{
-	var ctxPath = "<%=request.getContextPath()%>";
-	var cartid = $("#cartid"+rowid).val();
-	$.ajax(
-			{
-				type : 'DELETE',
-				contentType : 'application/json',
-				url : ctxPath + "/webapi/cart/delete/"+cartid,
-				success : function(){
-				},
-				error : function(){
-					swal("Could not remove from cart");
-				}
-		});
-}
-
-function addwalletmoney()
-{	
-	var listingid = "<%=request.getParameter("listingid")%>";
-	var ctxPath = "<%=request.getContextPath()%>";
-	var amt = parseInt($("#total_th").text());				// to get amount paid
-	amt = amt /2;
-	$.ajax(
-			{	
-				type : 'GET',
-				contentType : 'application/json',
-				url : ctxPath + "/webapi/listingDeals/listing/"+listingid,		//chk tht item is in a deal
-				success : function(res)
-				{	
-					if (res != [] )
-					{	var deal_id = res[0].dealid;				
-						$.ajax({   
-									type : 'GET',
-									contentType : 'application/json',
-									url : ctxPath + "/webapi/deals/"+deal_id,		//gets dealid and  go to dealtable
-									success : function(data)
-									{	
-										if(data.dealname =="50% Cash Back On Wallet")	//chks wheather its the 50% cashbak deal
-										{
-											var ctxPath = "<%=request.getContextPath()%>";
-										    var user = getCookie("user_details");
-										    if (user != "") 
-										    { 
-												var user_json = JSON.parse(user);
-												var amount = parseInt(amt) + parseInt(user_json.wallet);
-												
-												$.ajax(
-													{
-														type : 'PUT',
-														contentType : 'application/json',
-														url : ctxPath + "/webapi/users/update/"+user_json.id,
-														data : JSON.stringify({
-															"wallet": amount
-														}),
-														success : function(data)
-														{	
-															user_json.wallet = amount;
-															user = JSON.stringify(user_json);
-															setCookie("user_details", user, 30);
-															swal("Succesfully added Money to  your wallet")
-														},
-														error: function(err) 
-														{
-															swal(JSON.stringify(err));
-														}
-												});
-										    }
-									    }
-									},
-									error: function(err) 
-									{
-										swal(JSON.stringify(err));
-									}
-							});
-						
-					}
-					else
-						swal("no such itemid");
-				},
-				error: function(err) 
-				{
-					swal(JSON.stringify(err));
-				}
-		});
 }
 
 

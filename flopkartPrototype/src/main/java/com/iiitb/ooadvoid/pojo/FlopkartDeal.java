@@ -4,6 +4,8 @@ public class FlopkartDeal {
 	
 	private Integer id;
 	private String dealname;
+	private Integer days;
+	private String description;
 	
 	public Integer getId() {
 		return id;
@@ -16,5 +18,17 @@ public class FlopkartDeal {
 	}
 	public void setDealname(String dealname) {
 		this.dealname = dealname;
+	}
+	public Integer getDays() {
+		return days;
+	}
+	public void setDays(Integer days) {
+		this.days = days;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
 	}
 }

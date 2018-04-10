@@ -18,22 +18,90 @@
 	</header>
 		
 	<br/><br/>
-	<div class="col-md-8">
-		<div class="container" style="text-align: center; width: 400px">
-			<h3 style="color:white">Enter new deal category</h3><br/>
-			<form>
-				<input class="form-control" type="text" id="dealName"
-					placeholder="Enter deal name"> 
-				<br/>
-				<input type="submit"
-					onclick="insertDealCategory();" />
-			</form>
+ 	
+ 	<div class="row" style="margin-top:20px">
+		<div class="col-md-3"></div>
+		<div class="col-md-6">
+			<div class="panel-group checkout-steps" id="accordion">
+				<!-- categories  -->
+				<div  id="categories_panel" class="panel panel-default checkout-step-01" >
+				    
+				    <!-- panel-heading -->
+					<div class="panel-heading">
+			    	<h4 class="unicase-checkout-title">
+				        <a data-toggle="collapse" class="" data-parent="#accordion"
+				        href="#collapseCategories">Enter new Deal</a>
+				     </h4>
+			    	</div>	    
+			    	<!-- panel-heading -->
+
+					<!-- panel-body  -->
+					<div class="panel-collapse collapse in">
+					    <div class="panel-body">
+					       <div class="container">
+							<form>
+								<input class="form-control" type="text" id="dealName"
+					placeholder="Enter deal name">
+								<br/>
+								<textarea id="description" rows="7" cols="92" placeholder="Enter short description of the deal"></textarea>
+								<br/><br/>
+								<input class="form-control" type="number" id="days"
+									placeholder="Enter duration of deal (in days)"> 
+								<br/>
+								<input type="submit" class="btn btn-primary"
+									onclick="insertDealCategory();" />
+							</form>
+						</div>		
+						</div>
+					</div>
+					<!-- panel-body  --><!-- row -->
+				</div>
+				<!-- End checkout-step-01  -->
+			</div><!-- /.checkout-steps -->
 		</div>
 	</div>
 	
-	<div class="col-md-4" style="text-align:center">
-		<h2 style="color:white">Current deals</h2>
-		<div style="color:white" id="content"></div>
+	<br/><br><br/>
+	
+	<div class="row" style="margin-top:20px">
+			<div class="col-md-2"></div>
+				<div class="col-md-8">
+					<div class="panel-group checkout-steps" id="accordion">
+						<!-- checkout-step-01  -->
+						<div  id="user_panel" class="panel panel-default checkout-step-01" >
+				    
+				    <!-- panel-heading -->
+					<div class="panel-heading">
+			    	<h4 class="unicase-checkout-title">
+				        <a data-toggle="collapse" class="" data-parent="#accordion"
+				        href="#collapseUser">Deals</a>
+				     </h4>
+			    	</div>	    
+			    	<!-- panel-heading -->
+
+					<!-- panel-body  -->
+					<div id="collapseUser" class="panel-collapse collapse in">
+					    <div class="panel-body">
+							<div class="table-responsive">          
+							  <table id="user_table" class="table">
+							  <thead>
+						    	<tr>
+						    		<th>Deal Name</th>
+						    		<th>Description</th>
+						    		<th>Duration (in days)</th>
+								</tr>
+						    	</thead>
+						    	<tbody id="dealTable_body">
+						    	</tbody>
+						    </table>
+					       </div>			
+						</div>
+					</div>
+							<!-- panel-body  --><!-- row -->
+				</div>
+				<!-- End checkout-step-01  -->
+			</div><!-- /.checkout-steps -->
+		</div>
 	</div>
 </body>
 
@@ -63,14 +131,14 @@ function fetch()
 		contentType : 'application/json',
 		url : ctxPath + "/webapi/deals",
 		dataType : "json", // data type of response
-		success : function(result){
-			var data="<p>";
-            for(var i in result){
-               data+="<br/>"+(parseInt(i)+1)+") "
-               data+="Deal Name: "+result[i].dealname+"<br/>";
+		success : function(deals_json){
+			var data="";
+            for(var i in deals_json){
+               data+="<tr><td>"+deals_json[i].dealname+"</td>"+
+				"<td>"+deals_json[i].description+"</td>"+
+				"<td>"+deals_json[i].days+"</td></tr>";
             }
-            data += "</p>";
-            $("#content").html(data);
+            $("#dealTable_body").html(data);
     	},
     	error:function() {
         	swal("error occurred");
@@ -81,8 +149,12 @@ function fetch()
 function formToJSON() 
 {
 	var dealName = $("#dealName").val();
+	var days = $("#days").val();
+	var desc = $("#description").val();
 	var flopkartDeal = JSON.stringify({
-	    "dealname" : dealName
+	    "dealname" : dealName,
+	    "description" : desc,
+	    "days" : days
 	});
 	//alert(flopkartDeal);
 	return flopkartDeal;

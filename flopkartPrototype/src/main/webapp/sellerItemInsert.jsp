@@ -380,7 +380,7 @@ function checkCookie()
     else 
     {	swal("Login failed. Try again.");
       	window.location = "sellerHub.jsp";
-    		logout();
+    	logout();
     }
 }
 
@@ -454,13 +454,13 @@ function logout()
 			}
 		else
 		{
+			var categoryId = $("#catId").val();
 			$.ajax(
 			{
-				type : 'POST',
+				type : 'GET',
 				contentType : 'application/json',
-				url : ctxPath + "/webapi/subcategories/categoryId",
+				url : ctxPath + "/webapi/subcategories/category/"+categoryId,
 				dataType : "json", // data type of response
-				data : formToJSON2(),
 				success : function(result){
 					var data="<select id='subcatId'  name ='subcatId' style=\" background-color:white; font-size:20px;\">"+"<option value=' "+0+" '>Select a sub-category</option>";
 			        for(var i in result){
@@ -476,16 +476,6 @@ function logout()
 		}
 	}
 
-	function formToJSON2()
-	{
-		var categoryId = $("#catId").val();
-		var subcategoryName = "";
-		var flopkartSubCat = JSON.stringify({
-		    "categoryId" : categoryId,
-		    "subcategoryName" : subcategoryName
-		});
-		return flopkartSubCat;
-	}
 
 //-----------------------------------------------------------------------------------
 

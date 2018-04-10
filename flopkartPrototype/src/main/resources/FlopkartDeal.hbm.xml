@@ -13,6 +13,8 @@
       </id>
       
       <property name = "dealname" column = "dealname" type = "string" unique="true"/>
+      <property name = "description" column = "description" type = "string"/>
+      <property name = "days" column = "days" type = "int"/>
 	 
 	</class>
 </hibernate-mapping>

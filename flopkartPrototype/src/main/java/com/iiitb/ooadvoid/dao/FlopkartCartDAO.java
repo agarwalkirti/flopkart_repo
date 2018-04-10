@@ -2,6 +2,7 @@ package com.iiitb.ooadvoid.dao;
 
 import java.util.List;
 import com.iiitb.ooadvoid.pojo.FlopkartCart;
+import com.iiitb.ooadvoid.pojo.FlopkartListing;
 
 public class FlopkartCartDAO extends HibernateDAO<FlopkartCart>
 {
@@ -25,6 +26,16 @@ public class FlopkartCartDAO extends HibernateDAO<FlopkartCart>
 	
 	public List<FlopkartCart> getFlopkartCartItemByUserId(int id){
 		return super.findAll(entity_name,"userId",id);
+	}
+	
+	public FlopkartCart getFlopkartCartItemByUserListingId(int id, FlopkartCart cart)
+	{
+		System.out.println(id);
+		FlopkartListing fl = new FlopkartListingDAO().getFlopkartListingById(id);
+		List<FlopkartCart> fc =  super.findAll(entity_name,"userId",cart.getUserId(),"itemId",fl.getItemId());
+		if(fc.isEmpty())
+			return null;
+		return fc.get(0);
 	}
 
 	public int deleteFlopkartCartItem(int id)

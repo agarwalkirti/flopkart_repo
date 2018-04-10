@@ -49,6 +49,16 @@ public class FlopkartCartServices
 	}
 	
 	@POST
+	@Path("/user/listingid/{id}")
+	@Produces("application/json")
+	public FlopkartCart getFlopkartCartItemsByItemId(@PathParam("id") int id,FlopkartCart cart)
+	{
+		FlopkartCartDAO dao = new FlopkartCartDAO();
+		FlopkartCart cartItem = dao.getFlopkartCartItemByUserListingId(id,cart);
+		return cartItem;
+	}
+	
+	@POST
 	@Path("/create")
 	@Consumes("application/json")
 	public Response addFlopkartCartItem(FlopkartCart cart)

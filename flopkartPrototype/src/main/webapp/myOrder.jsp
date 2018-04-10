@@ -23,7 +23,8 @@
 <%@include file="footer.jsp" %>
 </body>
 <script>
-$(document).ready(function(){
+$(document).ready(function()
+{
 	 var ctxPath = "<%=request.getContextPath()%>";
 	 $('#count').val(0);
      headerFunctions(ctxPath);
@@ -41,13 +42,11 @@ function myorder(ctxPath)
 		contentType : 'application/json',
 		url : ctxPath + "/webapi/orders/user/"+userid,
 		dataType : "json", // data type of response
-		success : function(results){
-			
-			var data="";
-			/* data+="<div class = 'row' style = 'margin:5px 50px;border-style: groove;border-width: 7px;font-size:15px; text-align:left; padding-left:70px;' >"+
-			"<div class='col-sm-12' style ='font-size:15px; text-align:left; padding:20px;' >"; */
-            for(var i in results){
-           		 	displayListings(results[i],userid);
+		success : function(orders_json)
+		{
+            for(var i in orders_json)
+            {
+           		 	displayListings(orders_json[i],userid);
             }
           },
     	error:function() {
@@ -58,7 +57,7 @@ function myorder(ctxPath)
 
 function displayListings(result,userid)
 {	
-	
+
 	var ctxPath = "<%=request.getContextPath()%>";
     <% AccessProperties ap = new AccessProperties(); %>
     var imgServerURL = "<%=ap.getImageServerURL() %>"; 
@@ -66,14 +65,14 @@ function displayListings(result,userid)
 	var j = $("#count").val();
 	j++;
 	$('#count').val(j);
-	var minnu = 123;
 	var xxx = document.getElementById("img1").value;
 	var itid = result.itemId;
 	
-	data+="<div id='divi"+j+"' class = 'row' style = 'margin:5px 25px;border-style: groove;border-width: 7px;font-size:15px; text-align:left; padding-left:70px;' >"+
+	data+="<div id='divi"+j+"' class = 'row'"+
+	"style = 'margin:5px 25px;border-style: groove;border-width: 7px;font-size:15px; text-align:left; padding-left:70px;' >"+
 	"<div class='col-sm-4' style = 'font-size:15px; text-align:left; padding-top: 40px ; padding-left:0px;'>"+
 		" <div style='width: 260px;height: 250px;'>"+
-			"<img class='listingImage' id ="+ result.itemId +" style='max-height:100%; max-width:100%;' src='"+xxx+"' alt=''>"+
+			"<img class='listingImage' id ="+ result.itemId+""+j +" style='max-height:100%; max-width:100%;' src='"+xxx+"' alt=''>"+
 		"</div>"+
 	"</div>"+
 	"<div class='col-sm-8' style ='font-size:15px; text-align:left; padding:20px;' >"+
@@ -129,7 +128,7 @@ function displayListings(result,userid)
 			{
 				var imgs = imgServerURL+result1.imgUrl;
 				$('#img1').val(imgs);
-				document.getElementById(itemid).src = imgs;
+				document.getElementById(itemid+""+j).src = imgs;
 				document.getElementById("name"+j).innerHTML= "Item Name :  <b>"+result1.listingName+"</b>";
 				var sellerid = result1.sellerid;
 				$.ajax(
@@ -231,7 +230,7 @@ function reduceFromFlopkart(amt)
 						{
 							type : 'GET',
 							contentType : 'application/json',
-							url : ctxPath + "/webapi/accounts/accountno/"+sellerid,
+							url : ctxPath + "/webapi/accounts/user/"+sellerid,
 							success : function(res)
 							{
 								var amount = amt + res.balance ;
@@ -289,10 +288,17 @@ function highlight(el,val,itemId,userId)
 	var ctxPath = "<%=request.getContextPath()%>";
 	var parent = $(el).attr("id");
 	var stars =$("#"+parent).find("span");
+	var color;
+	if(val<=2)
+		color = "red";
+	else if(val<=4)
+		color = "orange";
+	else
+		color = "green";
 	var i;
 	for(i=0;i<val;i++)
 		{
-		   $(stars[i]).css('color','orange');
+		   $(stars[i]).css('color',color);
 		}
 	for(;i<5;i++)
 	{
@@ -443,12 +449,19 @@ function check(ctxPath,listingid,userId,el)
 
 function renderstars(el,val)
 {
+	var color;
+	if(val<=2)
+		color = "red";
+	else if(val<=4)
+		color = "orange";
+	else
+		color = "green";
 	var parent = $(el).attr("id");
 	var stars =$("#"+parent).find("span");
 	var i;
 	for(i=0;i<val;i++)
 		{
-		   $(stars[i]).css('color','orange');
+		   $(stars[i]).css('color',color);
 		}
 	for(;i<5;i++)
 	{

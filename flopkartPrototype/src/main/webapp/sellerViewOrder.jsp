@@ -79,39 +79,39 @@ function checkCookie()
     } 
     else 
     {	swal("no cookie");
-      	window.location = "sellerHome.jsp";
+      	window.location = "sellerHub.jsp";
     		logout();
     }
 }
 	function loadListings(){
 		$('#listing').empty();
-	    	var ctxPath = "<%=request.getContextPath()%>";
-	<%--     	var subcategoryid = "<%=request.getParameter("id")%>"; --%>
+	   var ctxPath = "<%=request.getContextPath()%>";
 	   var sellerid = $("#sellerid").val();
-	  //	swal(sellerid);
-	    	
 		        $.ajax(
 		        		{
 		        			type : 'GET',
 		        			contentType : 'application/json',
 		        			url : ctxPath + "/webapi/listings/seller/"+sellerid,
 		        			dataType : "json", // data type of response
-		        			success : function(result1){
-		        				for (var i in result1){
-		        					//swal("ItemId: "+result1[i].itemId); success
-							$.ajax(
+		        			success : function(listings_json)
+		        			{
+		        				for (var i in listings_json)
+		        				{
+									$.ajax(
 									{	
 		        							type : 'GET',
 		        							contentType : 'application/json',
-		        							url : ctxPath + "/webapi/orders/item/"+result1[i].itemId,
+		        							url : ctxPath + "/webapi/orders/item/"+listings_json[i].itemId,
 		        							dataType : "json", // data type of response
-		        							success : function(result){
-		        								if(result != ""){
-		        									displayListings(result);
-		        									
-		        								}
+		        							success : function(orders_json)
+		        							{
+		        			        				for (var j in orders_json)
+		        			        				{
+		        										displayListings(orders_json[j]);
+		        			        				}
 		        							},
-		        					    		error:function(err) {
+		        					    		error:function(err) 
+		        					    		{
 			        					    		swal(err);
 			        					    	}
 		        						});
@@ -159,7 +159,7 @@ function checkCookie()
 			return flopkart_order_update;
 			
 		}
-		function displayListings(result)
+		function displayListings(order_json)
 		{	
 			
 			var ctxPath = "<%=request.getContextPath()%>";
@@ -179,27 +179,27 @@ function checkCookie()
 			//alert($('#img1').val());
 			data+="<div class = 'row' style = 'margin:5px 25px;border-style: groove;border-width: 7px;font-size:15px; text-align:left; padding-left:70px;' >"+
 			"<div class='col-sm-4' style = 'font-size:15px; text-align:left; padding-top: 40px ; padding-left:0px;'>"+
-				" <div style='width: 260px;height: 250px;'>"+
-					"<img class='listingImage' id ="+ result[0].itemId +" style='max-height:100%; max-width:100%;' src='"+xxx+"' alt=''>"+
+				" <div style='height: 250px;'>"+
+					"<img class='listingImage' id ="+ order_json.itemId+""+i +" style='max-height:100%; max-width:100%;' src='"+xxx+"' alt=''>"+
 				"</div>"+
 			"</div>"+
 			"<div class='col-sm-8' style ='font-size:15px; text-align:left; padding:20px;' >"+
 			"<h2 style='padding-bottom:20px;'>Ordered Item No: "+i+"</h2>"+
-	        "<div style = 'padding-bottom:10px;font-size:15px;'>Order ID :  <b>"+result[0].orderId+"</b></div>"+
-	        "<div style = 'padding-bottom:10px;font-size:15px;'>Shipping Address : <b> "+result[0].shippingAddress+"</b></div>"+
-	        "<div style = 'padding-bottom:10px;font-size:15px;'>Total Amount : <b> "+result[0].totalAmount+"</b></div>"+
-	        "<div  style = 'padding-bottom:10px;font-size:15px;'>Quantity : <b> "+result[0].quantity+"</b></div>"+
-	        "<div  id='"+i+"' style = 'padding-bottom:10px;font-size:18px;color:green;'>Item Status :  <b>"+result[0].status+"</b></div><div><input  id='"+j+"' type='button'onclick='changestatus("+result[0].orderId+","+i+","+j+");' value ='Goods Shipped??'/></div>"+
+	        "<div style = 'padding-bottom:10px;font-size:15px;'>Order ID :  <b>"+order_json.orderId+"</b></div>"+
+	        "<div style = 'padding-bottom:10px;font-size:15px;'>Shipping Address : <b> "+order_json.shippingAddress+"</b></div>"+
+	        "<div style = 'padding-bottom:10px;font-size:15px;'>Total Amount : <b> "+order_json.totalAmount+"</b></div>"+
+	        "<div  style = 'padding-bottom:10px;font-size:15px;'>Quantity : <b> "+order_json.quantity+"</b></div>"+
+	        "<div  id='"+i+"' style = 'padding-bottom:10px;font-size:18px;color:green;'>Item Status :  <b>"+order_json.status+"</b></div><div><input  id='"+j+"' type='button'onclick='changestatus("+order_json.orderId+","+i+","+j+");' value ='Goods Shipped??'/></div>"+
 	       	"</div></div>";
 	       	
 			
 	       	$('#listing').append(data);
 	       	
-			if(result[0].status != "Money Paid" ){
+			if(order_json.status != "Money Paid" ){
 				document.getElementById(j).style.visibility = "hidden";
 			}
 			
-	       	var itemid = result[0].itemId;
+	       	var itemid = order_json.itemId;
 			$.ajax(
 					{
 					type : 'GET',
@@ -209,7 +209,7 @@ function checkCookie()
 					{
 						var imgs = imgServerURL+result.imgUrl;
 						$('#img1').val(imgs);
-						document.getElementById(itemid).src = imgs;
+						document.getElementById(itemid+""+i).src = imgs;
 					},
 					error:function(){
 		        	    		swal("error occurred");

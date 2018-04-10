@@ -12,7 +12,13 @@ public class FlopkartAccountDAO extends HibernateDAO<FlopkartAccount>{
 	{
 		return super.list(new FlopkartAccount());
 	}
-	
+
+	public FlopkartAccount addFlopkartAccount(FlopkartAccount acc)
+	{
+		acc.setPin(acc.encodePin(Integer.parseInt(acc.getPin())));
+		super.add(acc);
+		return acc;
+	}
 	public FlopkartAccount getFlopkartAccountById(int id)
 	{
 		
@@ -27,7 +33,7 @@ public class FlopkartAccountDAO extends HibernateDAO<FlopkartAccount>{
 	
 	public FlopkartAccount getFlopkartAccountByUserId(int id)
 	{
-		return super.find(new FlopkartAccount(),id);
+		return super.find(entity_name,"userid",id);
 	}
 
 	public int updateFlopkartAccount(int id, FlopkartAccount acc)

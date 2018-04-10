@@ -38,6 +38,16 @@ public class FlopkartAccountServices {
 		return accountval;
 	}
 	
+	@GET
+	@Path("/user/{id}")
+	@Produces("application/json")
+	public FlopkartAccount getFlopkartAccountByUser(@PathParam("id") int id)
+	{
+		FlopkartAccountDAO dao = new FlopkartAccountDAO();
+		FlopkartAccount accountval = dao.getFlopkartAccountByUserId(id);
+		return accountval;
+	}
+	
 	@POST
 	@Path("/accountno")
 	@Consumes("application/json")
@@ -67,6 +77,16 @@ public class FlopkartAccountServices {
 		}
 		return Response.ok().build();
 	}
+	@POST
+	@Path("/create")
+	@Consumes("application/json")
+	public Response addFlopkartAccount(FlopkartAccount acc)
+	{
+		
+		FlopkartAccountDAO dao = new FlopkartAccountDAO();
+		dao.addFlopkartAccount(acc);
 
+		return Response.ok().build();
+	}
 		
 }

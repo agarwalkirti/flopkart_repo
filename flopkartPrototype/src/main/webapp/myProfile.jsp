@@ -111,6 +111,7 @@
               <div class="sidebar-widget-body">
                 <ul class="list">
                   <li><h5><a href="flopkartAccount.jsp">Flopkart Bank Account</a></h5></li>
+                  <li><h5><a href="wallet.jsp">Wallet</a></h5></li>
                 </ul>
               </div>
               <!-- /.sidebar-widget-body --> 
@@ -281,7 +282,7 @@
                   <p style="line-height: 1.5; margin-top: 15px;">Your updated information will be stored and used for all further purposes.</p>
                   <h4 style="margin-bottom: 5px; margin-top: 20px; padding: 0; line-height: 1.5; 
               	    	font-weight: 700; font-size: 14px">How do I pay online?</h4>
-                  <p style="line-height: 1.5; margin-top: 15px;">First, you create a Flopkart Bank account. Then, you add enough money so that you can enjoy 
+                  <p style="line-height: 1.5; margin-top: 15px;">First, you create a Flopkart Bank account. Then, using that account, you can add money to your wallet so that you can enjoy 
                   the online shopping experience!</p>
               </div>
         
@@ -527,6 +528,10 @@ function diplayUser(user)
 function logout()
 {
 	deleteCookie("user_details");
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+    });
 }
 
 $('#dpImg').change(function()
@@ -559,12 +564,13 @@ function changeinfo(ctxPath)
 		data : updateJSON(),
 		success : function()
 		{
-			deleteCookie("user_details");
+			swal("Updated!")
+			logout();
 			
 		},
 		error : function()
 				{
-			deleteCookie("user_details");	
+			logout();
 					}
 		});
 }
