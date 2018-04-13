@@ -238,9 +238,12 @@ function renderCartItem(cartItems){
 						"</div>"+
 					"</div>"+"<!-- /.row -->"+
 					"<div class='cart-product-info'>"+
-					"COLOR: "+item.colour+"<br/>"+"Seller id: "+item.sellerid+
+					"Item Id : "+item.itemId+
+					"<br/>COLOR : "+item.colour+
+					
 					"<input type='number' id='dealId"+i+"' hidden='hidden'>"+
 					"<div id='dealName"+i+"'></div>"+
+					"<div id ='seller"+i+"'></div> "+
 					"</div>"+
 				"</td>"+
 				"<td class='cart-product-quantity'>"+
@@ -262,6 +265,7 @@ function renderCartItem(cartItems){
 	            $("#noOfItems").val(parseFloat(i)+1);
 	            $("#content").append(data);
 	            getDealDetails(item.id, i);
+	            getsellerid(item.sellerid, i);
 			  },
 			  error:function() {
 			  	swal("error occurred");
@@ -398,6 +402,28 @@ function getDealDetails(listingid, i){
 	});
 }
 
+function getsellerid(sellerid,i){
+	var ctxPath = "<%=request.getContextPath()%>";
+	$.ajax({
+		type : 'GET',
+		async:false,
+		url : ctxPath + "/webapi/users/"+sellerid,
+		dataType : "json", // data type of response
+		success : function(seller){
+			
+			if(seller !=""){
+				
+				document.getElementById("seller"+i).innerHTML = "Seller Id : "+seller.email;
+				
+			}
+		},
+		error: function(){
+			//alert("error occurred"); 
+		}
+	});
+}
+
+
 function getDealName(dealid, i){
 	var ctxPath = "<%=request.getContextPath()%>";
 	$.ajax({
@@ -406,7 +432,7 @@ function getDealName(dealid, i){
 		url : ctxPath + "/webapi/deals/"+dealid,
 		dataType : "json", // data type of response
 		success : function(deal){
-			document.getElementById("dealName"+i).innerHTML = "DEAL: "+deal.dealname;
+			document.getElementById("dealName"+i).innerHTML = "DEAL : "+deal.dealname;
 		},
 		error: function(){
 			//alert("error occurred"); 

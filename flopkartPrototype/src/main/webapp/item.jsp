@@ -150,37 +150,52 @@
 							<div class='col-sm-6 col-md-7 product-info-block'>
 								<div class="product-info" id="product-info">
 									<h1 class='name' id='product_title'></h1>
-						            <div id="seller_rating" style="font-size:20px">
-						                 <span>Seller Rating:</span>
-						                 <span class='fa fa-star'></span>
-						                 <span class='fa fa-star'></span>
-						                 <span class='fa fa-star'></span>
-						                 <span class='fa fa-star'></span>
-						                 <span class='fa fa-star'></span>
+									
+									<div class="row">
+						            <div class="col-sm-4" id="seller_rating" style="padding-right:0px;">
+						                 <span style="font-size:14px">Seller Rating : </span>
+						                 <span style="font-size:16px" class='fa fa-star'></span>
+						                 <span style="font-size:16px" class='fa fa-star'></span>
+						                 <span style="font-size:16px" class='fa fa-star'></span>
+						                 <span style="font-size:16px" class='fa fa-star'></span>
+						                 <span style="font-size:16px" class='fa fa-star'></span>
 						            </div>
-						            <div id="seller_rating_unavailable" style="font-size:20px" hidden="hidden">
-						                 <span>Seller Rating:</span>
-                                         <span style="color:red">Seller currently does not have enough ratings</span> 
+						            
+						            <div class="col-sm-5" id="seller_rating_unavailable" style="font-size:14px" hidden="hidden">
+						                 <span style=" font-size:14px;">Seller Rating : </span>
+                                         <span style="color:red; font-size:14px;"> Not enough Ratings</span> 
 						            </div>
-						            <div id="seller_rating_total" style="font-size:15px"></div>
-						            <div id="seller_rating_customers" style="font-size:15px"></div>
+						          <div class="col-sm-5" style="color:blue;"> 
+						          <span id="seller_rating_total" style="font-size:14px"></span>
+						            <span id="seller_rating_customers" style="font-size:14px"></span></div></div>
+						            
+						            <div class="row" style="padding-top:9px;">
+										<div class="col-sm-2" style="padding-right:0px;">
+											<span style="font-size:14px">Item id </span>
+										</div>
+										<div class="col-sm-8" style="padding-left:0px;">
+											<span style="font-size:14px" id='product_id'></span>
+										</div>
+										<div class="col-sm-4" style="padding-right:0px;"></div>
+									</div>
 									<div class='stock-container info-container m-t-10'>
 										<div class='row'>
-											<div class='col-sm-2'>
-												<div class='stock-box'>
-													<span class='label'>Availability :</span>
+											<div class='col-sm-2' >
+												<div class='stock-box' style="padding-left:0px">
+													<span  style="font-size:14px">Availability </span>
 												</div>
 											</div>
-											<div class='col-sm-9'>
-												<div class='stock-box'>
-													<span style="color: red; font-size: 15px" id='available'></span>
+											<div class='col-sm-9' style="padding-left:0px">
+												<div class='stock-box' style="padding-left:0px">
+													<span style="color: red; font-size: 14px" id='available'></span>
 													<span hidden="hidden" id='available_quant'></span>
 												</div>
 											</div>
 										</div>
 									</div>
 									<div class='description-container m-t-20'
-										style="font-size: 15px" id='itemdescription'></div>
+										style="font-size: 14px " id='itemdescription'>
+									</div>
 									<div class='price-container info-container m-t-20'>
 										<div class='row'>
 											<div class='col-sm-6'>
@@ -193,8 +208,8 @@
 														<i class='fa fa-rupee-sign'></i> <span id='price-strike'></span>
 													</div>
 												</div>
-												<div style='font-size: 15px; color: blue' id='discount'></div>
-												<div style='font-size: 20px; color: purple' id='dealname'></div>
+												<div style='font-size: 14px; color: blue' id='discount'></div>
+												<div style='font-size: 15px; color: purple' id='dealname'></div>
 											</div>
 											<div class='col-sm-6'>
 												<div class='favorite-button m-t-10'>
@@ -293,11 +308,12 @@ $(document).ready(function()
 				}
 				else
 				{
-					$("#available").text("In Stock "+"("+listing_json.quantity+")");
+					$("#available").text(" : In Stock "+"("+listing_json.quantity+")");
 					$("#available_quant").text(listing_json.quantity);
 				}
 				var amount = listing_json.price - (listing_json.discount*listing_json.price/100);
 				$("#product_title").text(listing_json.listingName);
+				$("#product_id").text(" : " +listing_json.itemId);
 				$("#itemdescription").text(listing_json.description);
 				$("#discountedprice").text(amount);
 				$("#price-strike").text(listing_json.price);
@@ -553,9 +569,9 @@ function rating(ctxPath,id)
 				   var sum=0;
 				   for(var i in results)
 					   sum=sum+results[i].stars
-				   var data = "<span>Seller Total Stars: </span><span>"+sum+" stars</span>";
+				   var data = "<span> ( </span> <span>"+sum+" stars</span>";
 				   $('#seller_rating_total').append(data);
-				   data = "<span>Seller Rated By: </span><span>"+results.length+" customers</span>";
+				   data = "</span><span> / </span><span>"+results.length+" customer ratings</span> <span> ) </span>";
 				   $('#seller_rating_customers').append(data);
 				   var val = Math.round(sum/results.length);
 				   renderSeller(val);

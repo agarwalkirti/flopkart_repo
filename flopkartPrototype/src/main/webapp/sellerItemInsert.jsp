@@ -432,7 +432,7 @@ function logout()
 			url : ctxPath + "/webapi/categories",
 			dataType : "json", // data type of response
 			success : function(result){
-				var data="<select id='catId' style=\" background-color:white; font-size:20px;\">"+"<option value=' "+0+" '>Select a category</option>";
+				var data="<select id='catId' name='catId' style=\" background-color:white; font-size:20px;\">"+"<option value=' "+0+" '>Select a category</option>";
 	            for(var i in result){
 	               data+="<option value='"+result[i].id+"'>"+result[i].categoryName+"</option>";
 	            }

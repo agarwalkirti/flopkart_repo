@@ -146,10 +146,10 @@
 								    	</thead>
 								    	<tbody id="orderSummary_body">
 								    	<tr>
-								    		<th colspan="3">Total Price:</th>
-								    		<td id="calc"></td>
-	
-	
+								    		<th>Delivery Charges: </th>
+								    		<td id="calc">0</td>
+								    		<td></td>
+								    		<th>Total Price:</th>
 								    		<th id="total_th">0</th>
 								    	</tr>
 								    	</tbody>
@@ -375,6 +375,12 @@ function dispOrders(cart_json,i)
 							    	$("#orderSummary_body").prepend(table_data);
 							    	total = total + (actualPrice*cart_json.quantity);
 							    	$("#total_th").html(total);
+							    	if(total < 1000){
+							    		$("#calc").html("50");
+							    		total += 50;
+							    		//alert(total)
+							    		$("#total_th").html(total);
+							    	}
 								},
 								error: function(err) 
 								{
@@ -454,6 +460,12 @@ function displayOrderSummary(id)
 							    	//alert("New quant: "+ $("#new_quant0").val());
 							    	$("#cartid0").val(cart_json.id)
 							    	$("#total_th").html(total);
+							    	if(total < 1000){
+							    		$("#calc").html("50");
+							    		total += 50;
+							    		//alert(total)
+							    		$("#total_th").html(total);
+							    	}
 								},
 								error: function(err) 
 								{
@@ -666,6 +678,8 @@ function order_formToJSON(rowid)
 	var orderid = <%=orderid%> + rowid;
     var user = getCookie("user_details");
 	var userid = JSON.parse(user).id;
+	var fname = JSON.parse(user).firstName;
+	var lname = JSON.parse(user).lastName;
 	var TotalAmount = parseInt($("#quant"+rowid).text()) * parseInt($("#price"+rowid).text());
 	<%
 	Date myDate = new Date();
@@ -673,7 +687,7 @@ function order_formToJSON(rowid)
 	var flopkartOrder = JSON.stringify({
         "itemId": $("#itemid"+rowid).val(),
         "orderId": orderid,
-	    "shippingAddress" : shipAddress,
+	    "shippingAddress" : fname +" " + lname + " , "+shipAddress,
 	    "userId" : userid,
 	    "quantity": $("#quant"+rowid).text(),
 	    "status" : "Ordered",
@@ -905,12 +919,12 @@ function addwalletmoney()
 									url : ctxPath + "/webapi/deals/"+deal_id,		//gets dealid and  go to dealtable
 									success : function(data)
 									{	
-										if(data.dealname =="50% Cash Back On Wallet")	//chks wheather its the 50% cashbak deal
+										if(data.dealname =="15% Cashback")	//chks wheather its the 50% cashbak deal
 										{
 											var ctxPath = "<%=request.getContextPath()%>";
 										    var user = getCookie("user_details");
 										    if (user != "") 
-										    { 
+										    { 	
 												var user_json = JSON.parse(user);
 												var amount = parseInt(amt) + parseInt(user_json.wallet);
 												

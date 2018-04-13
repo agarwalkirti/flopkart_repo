@@ -187,9 +187,22 @@ function signup(ctxPath)
 	success : renderDetails,
 	error : function(err)
 			{
-				alert(JSON.stringify(err));
 				var status = err.status;
 				if(status==200){
+					$('#loginModal').modal('hide');
+					swal({
+						  title: "Success",
+						  text: "User signed up successfully!",
+						  icon: "success"
+						})
+						.then((reload) => {
+						  if (reload) { 
+							  window.location.reload(true);
+						  }
+						  else {
+							  window.location.reload(true);
+						  }
+					});
 				}
 			}
 	});
@@ -319,15 +332,14 @@ function onSignIn(googleUser) {
 	  console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
 	  
 	  var flipkart_user = JSON.stringify({
-	    	"email":profile.getEmail(),
-	    	"password": "password"
+	    	"email":profile.getEmail()
 	    });
 	  
 	  $.ajax({
 		type : 'POST',
 		async: false,
 		contentType : 'application/json',
-		url : "http://localhost:8080/flopkartPrototype/webapi/users/email",
+		url : "http://localhost:8080/flopkartPrototype/webapi/users/gmail",
 		dataType : "json", // data type of response
 		data : flipkart_user,
 		success : function(user)
@@ -338,9 +350,13 @@ function onSignIn(googleUser) {
 }
 
 function renderDetailsGoogle(user,profile)
-{ 
+{    
+	var name = profile.getName();
+	var firstName = name.split(" ")[0];
+	var lastName = name.split(" ")[1];
 	var flipkart_user = JSON.stringify({
-		"firstName":profile.getName(),
+		"firstName":firstName,
+		"lastName":lastName,
   		"email":profile.getEmail(),
   		"password":"password",
   		"userType":"customer"
@@ -356,7 +372,32 @@ function renderDetailsGoogle(user,profile)
 			dataType : "json", // data type of response
 			data : flipkart_user,
 			success : signupGoogle,
-			error: signupGoogle
+			error:  function(err)
+			{
+				var status = err.status;
+				if(status==200)
+				{
+					$('#loginModal').modal('hide');
+					swal({
+						  title: "Success",
+						  text: "User signed up successfully!",
+						  icon: "success"
+						})
+						.then((reload) => 
+						{
+						  if (reload) 
+						  {
+							  signOut();
+							  window.location.reload(true);
+						  }
+						  else 
+						  {
+							  signOut();
+							  window.location.reload(true);
+						  }
+					});
+				}
+			}
 		});
 	}
 	else
@@ -368,16 +409,19 @@ function renderDetailsGoogle(user,profile)
 	return false;
 }
 
-function signupGoogle(user){
-	alert(JSON.stringify(user));
+function signupGoogle(user)
+{
+	//alert(JSON.stringify(user));
 	showUser(user);
 	setCookie("user_details", JSON.stringify(user), 30);
 	$('#loginModal').modal('hide');
 }
 
-function signOut() {
+function signOut() 
+{
     var auth2 = gapi.auth2.getAuthInstance();
-    auth2.signOut().then(function () {
+    auth2.signOut().then(function () 
+    {
       console.log('User signed out.');
     });
  }

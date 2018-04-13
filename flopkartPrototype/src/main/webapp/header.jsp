@@ -205,7 +205,12 @@
 								onclick="show_signup();">New to Flopkart? Sign up</button>
 						</div>
 						<div class="row">
-							<div class="g-signin2" data-onsuccess="onSignIn"></div>
+							<div class="col-sm-5" style="margin-top: -12px;"><hr/></div>
+							<div class="col-sm-2">OR</div>
+							<div class="col-sm-5" style="margin-top: -12px;"><hr/></div>
+						</div>
+						<div class="row">
+							<div class="g-signin2" data-theme="dark" data-width="300" data-onsuccess="onSignIn" data-longtitle="true"></div>
 						</div>
 		</div>
 		
@@ -319,7 +324,6 @@
 									<li role="presentation" class="divider"></li>
 									<li role="presentation" style="display: flex; align-items: center; width: 100%;"><a href="underConstruct.html">
 									<i style="color: #157ed2" class="fas fa-chart-line"></i> Advertise</a></li>
-									<li><a href="#" onclick="signOut();">Sign out</a></li>
 								</ul>
 							</div>
 							<!-- ============================================================= MORE OPTIONS END ============================================================= -->

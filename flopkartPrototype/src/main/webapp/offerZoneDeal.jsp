@@ -29,7 +29,7 @@
 	width: 10%;
 	padding: 18px 8px;
 	border-radius: 2px;
-	margin-left: 600px;
+	margin-left: 500px;
 }
 .buynow:hover {
 	color : white;
@@ -281,7 +281,7 @@ function getDealDet(ctxPath,mod,col){
 					  "</div>"+
 					  "<div class='panel-footer'>"+
 					  "<div style='font-size: 20px;color: red; display:inline-flex'> OFFER PRICE: &nbsp; <i class='fa fa-rupee-sign'></i> &nbsp; ( <div id='total"+i+"'></div>"+"  &nbsp; -  &nbsp; "+"<div id='minimum"+i+"'></div> )</div>"+
-					  "<button onclick='buynow("+listingDeal[parseInt(i)+1].comboid+")' class='buynow' id='buynow'>Buy Now</a>"+
+					  "<button onclick='buynow(\""+listingDeal[parseInt(i)+1].comboid+"\")' class='buynow' id='buynow'>Buy Now</a>"+
 					  "</div>"+
 					  "</div>";
 					$("#deal-product").append(data);
@@ -399,7 +399,7 @@ function buynow(comboid){
 		swal("Please login");
 	}
 	else{
-		window.location.href= "buyNowDeal.jsp?comboid="+comboid;
+		document.location.href= "buyNowDeal.jsp?comboid="+comboid;
 	}
 }
 </script>
