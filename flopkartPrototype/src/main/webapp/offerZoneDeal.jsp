@@ -334,7 +334,7 @@ function minSumCalc(price, i){
 	if($("#minimum"+i).text()==""){
 		$("#minimum"+i).text(price);
 	}
-	if(price < parseFloat($("#minimum"+i).text())){
+	if(price < parseInt($("#minimum"+i).text())){
 		$("#minimum"+i).text(price);
     }
 	var sum;
@@ -342,7 +342,7 @@ function minSumCalc(price, i){
 		sum = 0.0;
 	}
 	else {
-		sum = parseFloat($("#total"+i).text());
+		sum = parseInt($("#total"+i).text());
 	}
 	sum += price;
 	$("#total"+i).text(sum);

@@ -4,6 +4,11 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta property="og:url"           content="https://localhost:8080/flopkartPrototype" />
+<meta property="og:type"          content="website" />
+<meta property="og:title"         content="Your Website Title" />
+<meta property="og:description"   content="Your description" />
+<meta property="og:image"         content="https://www.your-domain.com/path/image.jpg" />
 <%@include file="metaContent.jsp"%>
 <title>Item Display</title>
 </head>
@@ -36,6 +41,14 @@
 </style>
 
 <body>
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = 'https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.12';
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
 
 	<%@include file="header.jsp"%>
 	<div class="breadcrumb">
@@ -172,6 +185,7 @@
 						            <div class="row" style="padding-top:9px;">
 										<div class="col-sm-2" style="padding-right:0px;">
 											<span style="font-size:14px">Item id </span>
+											<div class="fb-share-button" data-href="https://www.google.co.in/?gfe_rd=cr&dcr=0&ei=wFbOWtutO-2cX9OFq-AD" data-layout="button_count" data-size="small" data-mobile-iframe="false"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fplugins%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a></div>
 										</div>
 										<div class="col-sm-8" style="padding-left:0px;">
 											<span style="font-size:14px" id='product_id'></span>
@@ -428,7 +442,10 @@ $("#quant-up").click(function(){
 		value++;
 		$("#quantity").val(value);
 		$("#quant").val(value);
-		
+	}
+	else {
+		$("#quantwarning").text("Only "+available_quant+" items are available in stock");
+		$("#quantwarning").show();
 	}
 });
 
@@ -489,7 +506,10 @@ function getDealName(ctxPath){
 			url : ctxPath + "/webapi/deals/"+dealid,
 			dataType : "json", // data type of response
 			success : function(deal){
-				$("#dealname").html("SUPER DEAL: "+deal.dealname+"!"+"&nbsp; &nbsp; <a class='btn btn-primary' href='offerZoneDeal.jsp?id="+dealid+"'> Avail Deal </a>");
+				$("#dealname").html("SUPER DEAL: "+deal.dealname+"!"+"&nbsp; &nbsp;");
+				if(deal.dealname != "15% Cashback" || deal.dealname != "50% off"){
+					$("#dealname").append("<a class='btn btn-primary' href='offerZoneDeal.jsp?id="+dealid+"'> Avail Deal </a>");
+				}
 			},
 			error: function(){
 				//alert("error occurred"); 
